@@ -1,5 +1,8 @@
 #include "Patient.h"
 
+/**
+ * @brief Creates a Patient object.
+ */
 Patient::Patient(int id,
             const std::string& firstName,
             const std::string& lastName,

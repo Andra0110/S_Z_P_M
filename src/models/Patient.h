@@ -2,6 +2,10 @@
 
 #include <string>
 
+/**
+ * @class Patient
+ * @brief Represents a patient in the clinic system.
+ */
 class Patient
 {
     private:
@@ -11,13 +15,45 @@ class Patient
         std::string pesel;
 
     public:
+
+        /**
+         * @brief Constructs a new Patient object.
+         * 
+         * @param id Unique patient identifier.
+         * @param firstName Patient first name.
+         * @param lastName Patient last name.
+         * @param pesel Patient PESEL number.
+         */
         Patient(int id,
             const std::string& firstName,
             const std::string& lastName,
             const std::string& pesel);
-        
+
+        /**
+         * @brief Returns patient ID.
+         * 
+         * @return int Patient ID.
+         */
         int getId() const;
+
+        /**
+         * @brief Returns patient first name.
+         * 
+         * @return std::string Patient first name.
+         */
         std::string getFirstName() const;
+
+        /**
+         * @brief Returns patient last name.
+         * 
+         * @return std::string Patient last name.
+         */
         std::string getLastName() const;
+
+        /**
+         * @brief Returns patient PESEL number.
+         * 
+         * @return std::string Patient PESEL.
+         */
         std::string getPesel() const;
 };
