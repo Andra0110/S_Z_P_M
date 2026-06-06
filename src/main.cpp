@@ -2,6 +2,7 @@
 #include "models/Patient.h"
 #include "services/PatientService.h"
 #include "utils/Validator.h"
+#include "models/Doctor.h"
 
 int main()
 {
@@ -61,6 +62,33 @@ int main()
 
     std::cout << Validator::isValidPesel("12345")
               << std::endl;
+              
+
+
+std::cout << "\nDoctor test:\n";
+
+Doctor doctor1(
+    1,
+    "Jan",
+    "Nowak",
+    "Cardiology"
+);
+
+std::cout << "ID: "
+          << doctor1.getId()
+          << std::endl;
+
+std::cout << "First name: "
+          << doctor1.getFirstName()
+          << std::endl;
+
+std::cout << "Last name: "
+          << doctor1.getLastName()
+          << std::endl;
+
+std::cout << "Specialization: "
+          << doctor1.getSpecialization()
+          << std::endl;
 
     return 0;
 }
