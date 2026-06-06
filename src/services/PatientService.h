@@ -38,4 +38,14 @@ class PatientService
          * @return nullptr If patient does not exist.
          */
         Patient* searchPatientById(int id);
+
+
+        /**
+         * @brief Removes patient by ID.
+         *
+         * @param id Patient identifier.
+         * @return true If patient was removed.
+         * @return false If patient was not found.
+         */
+        bool removePatient(int id);
      };

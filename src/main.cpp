@@ -30,5 +30,22 @@ int main()
                   << std::endl;
     }
 
+    bool removed = patientService.removePatient(1);
+
+    if (removed)
+    {
+        std::cout << "Patient removed successfully."
+                  << std::endl;  
+    }
+    else
+    {
+        std::cout << "Patient not found."
+                  << std::endl;
+    }
+
+    std::cout <<"\nPatients after removal:\n";
+
+    patientService.displayPatients();
+
     return 0;
 }

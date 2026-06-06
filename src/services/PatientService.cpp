@@ -11,6 +11,9 @@ void PatientService::addPatient(const Patient& patient)
     patients.push_back(patient);
 }
 
+/**
+ * @brief Displays all patients stored in the system.
+ */
 void PatientService::displayPatients() const
 {
     for (const auto& patient : patients)
@@ -33,6 +36,13 @@ void PatientService::displayPatients() const
     }
 }
 
+/**
+ * @brief Searches patient by ID.
+ *
+ * @param id Patient identifier.
+ * @return Patient* Pointer to found patient.
+ * @return nullptr If patient was not found.
+ */
 Patient* PatientService::searchPatientById(int id)
 {
     for (auto& patient : patients)
@@ -44,4 +54,25 @@ Patient* PatientService::searchPatientById(int id)
     }
 
     return nullptr;
+}
+
+/**
+ * @brief Removes patient by ID.
+ *
+ * @param id Patient identifier.
+ * @return true If patient was removed.
+ * @return false If patient was not found.
+ */
+bool PatientService::removePatient(int id)
+{
+    for (auto it = patients.begin(); it != patients.end(); ++it)
+    {
+        if (it->getId() == id)
+        {
+            patients.erase(it);
+            return true;
+        }
+    }
+
+    return false;
 }
