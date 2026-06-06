@@ -1,6 +1,7 @@
 #include <iostream>
 #include "models/Patient.h"
 #include "services/PatientService.h"
+#include "utils/Validator.h"
 
 int main()
 {
@@ -46,6 +47,20 @@ int main()
     std::cout <<"\nPatients after removal:\n";
 
     patientService.displayPatients();
+
+    std::cout << "\nValidator tests:\n";
+
+    std::cout << Validator::isValidName("Anna")
+              << std::endl;
+              
+    std::cout << Validator::isValidName("Anna123")
+              << std::endl;
+
+    std::cout << Validator::isValidPesel("12345678901")
+              << std::endl;
+
+    std::cout << Validator::isValidPesel("12345")
+              << std::endl;
 
     return 0;
 }
