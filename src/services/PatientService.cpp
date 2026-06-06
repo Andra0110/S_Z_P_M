@@ -2,7 +2,9 @@
 #include <iostream>
 
 /**
- * @brief Displays all patients.
+ * @brief Adds a new patient to the system.
+ *
+ * @param patient Patient object to add.
  */
 void PatientService::addPatient(const Patient& patient)
 {
@@ -29,4 +31,17 @@ void PatientService::displayPatients() const
                   << patient.getPesel()
                   << std::endl;
     }
+}
+
+Patient* PatientService::searchPatientById(int id)
+{
+    for (auto& patient : patients)
+    {
+        if (patient.getId() == id)
+        {
+            return &patient;
+        }
+    }
+
+    return nullptr;
 }

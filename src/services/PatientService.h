@@ -37,16 +37,5 @@ class PatientService
          * @return Patient* Pointer to patient object.
          * @return nullptr If patient does not exist.
          */
-        Patient* PatientService::searchPatientById(int id)
-        {
-            for (auto& patient : patients)
-            {
-                if (patient.getId() == id)
-                {
-                    return &patient;
-                }
-            }
-
-            return nullptr;
-        }
-};
+        Patient* searchPatientById(int id);
+     };
