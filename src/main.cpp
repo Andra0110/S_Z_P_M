@@ -3,6 +3,7 @@
 #include "services/PatientService.h"
 #include "utils/Validator.h"
 #include "models/Doctor.h"
+#include "services/DoctorService.h"
 
 int main()
 {
@@ -89,6 +90,26 @@ std::cout << "Last name: "
 std::cout << "Specialization: "
           << doctor1.getSpecialization()
           << std::endl;
+
+
+std::cout << "\nDoctorService test:\n";
+
+DoctorService doctorService;
+
+doctorService.addDoctor(doctor1);
+
+doctorService.displayDoctors();
+
+Doctor* foundDoctor = doctorService.searchDoctorById(1);
+
+if (foundDoctor != nullptr)
+{
+    std::cout << "Doctor found: "
+              << foundDoctor->getFirstName()
+              << " "
+              << foundDoctor->getLastName()
+              << std::endl;
+}
 
     return 0;
 }
