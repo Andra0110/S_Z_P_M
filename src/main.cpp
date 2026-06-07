@@ -5,6 +5,7 @@
 #include "models/Doctor.h"
 #include "services/DoctorService.h"
 #include "models/Visit.h"
+#include "services/VisitService.h"
 
 int main()
 {
@@ -145,6 +146,24 @@ std::cout << "Doctor ID: "
 std::cout << "Date: "
           << visit1.getDate()
           << std::endl;
+
+
+std::cout << "\nVisitService test:\n";
+
+VisitService visitService;
+
+visitService.addVisit(visit1);
+
+visitService.displayVisits();
+
+Visit* foundVisit = visitService.searchVisitById(1);
+
+if (foundVisit != nullptr)
+{
+    std::cout << "Visit found: "
+              << foundVisit->getDate()
+              << std::endl;
+}
 
     return 0;
 }
