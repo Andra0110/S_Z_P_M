@@ -23,4 +23,14 @@ class FileService
         const std::vector<Patient>& patients,
         const std::string& filename
     );
+
+    /**
+     * @brief Loads patients from a text file.
+    *
+     * @param filename Input file name.
+    * @return std::vector<Patient> Loaded patients.
+    */
+    static std::vector<Patient> loadPatients(
+        const std::string& filename
+    );
 };

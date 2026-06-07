@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+
 #include "models/Patient.h"
 #include "services/PatientService.h"
 #include "utils/Validator.h"
@@ -222,6 +224,23 @@ std::cout << Validator::isValidDate(
     "abc"
 ) << std::endl;
 
+
+std::cout << "\nLoading patients from file:\n";
+
+std::vector<Patient> loadedPatients =
+    FileService::loadPatients(
+        "data/patients.txt"
+    );
+
+for (const auto& patient : loadedPatients)
+{
+    std::cout << patient.getId()
+              << " "
+              << patient.getFirstName()
+              << " "
+              << patient.getLastName()
+              << std::endl;
+}
 
     return 0;
 }
