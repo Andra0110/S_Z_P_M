@@ -76,3 +76,13 @@ bool PatientService::removePatient(int id)
 
     return false;
 }
+
+/**
+ * @brief Gets all patients.
+ *
+ * @return const std::vector<Patient>& List of patients.
+ */
+const std::vector<Patient>& PatientService::getPatients() const
+{
+    return patients;
+}

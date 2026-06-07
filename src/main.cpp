@@ -6,6 +6,7 @@
 #include "services/DoctorService.h"
 #include "models/Visit.h"
 #include "services/VisitService.h"
+#include "services/FileService.h"
 
 int main()
 {
@@ -14,6 +15,12 @@ int main()
     Patient patient1(1, "Anna", "Kowalska", "12345678901");
 
     patientService.addPatient(patient1);
+
+    FileService::savePatients
+    (
+        patientService.getPatients(),
+        "data/patients.txt"
+    );
 
     patientService.displayPatients();
 
@@ -214,6 +221,7 @@ std::cout << Validator::isValidDate(
 std::cout << Validator::isValidDate(
     "abc"
 ) << std::endl;
+
 
     return 0;
 }

@@ -48,4 +48,12 @@ class PatientService
          * @return false If patient was not found.
          */
         bool removePatient(int id);
+
+        /**
+        * @brief Gets all patients.
+        *
+        * @return const std::vector<Patient>& List of patients.
+        */
+       const std::vector<Patient>& getPatients() const;
+     
      };
