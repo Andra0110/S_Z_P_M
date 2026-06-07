@@ -4,6 +4,7 @@
 #include "utils/Validator.h"
 #include "models/Doctor.h"
 #include "services/DoctorService.h"
+#include "models/Visit.h"
 
 int main()
 {
@@ -118,6 +119,31 @@ std::cout << Validator::isValidSpecialization("Cardiology")
           << std::endl;    
           
 std::cout << Validator::isValidSpecialization("")
+          << std::endl;
+
+std::cout << "\nVisit test:\n";
+
+Visit visit1(
+    1,
+    1,
+    1,
+    "2026-06-15 14:00"
+);
+
+std::cout << "Visit ID: "
+          << visit1.getId()
+          << std::endl;
+
+std::cout << "Patient ID: "
+          << visit1.getPatientId()
+          << std::endl;
+
+std::cout << "Doctor ID: "
+          << visit1.getDoctorId()
+          << std::endl;
+
+std::cout << "Date: "
+          << visit1.getDate()
           << std::endl;
 
     return 0;
