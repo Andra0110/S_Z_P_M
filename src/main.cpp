@@ -111,5 +111,14 @@ if (foundDoctor != nullptr)
               << std::endl;
 }
 
+
+std::cout << "\nDoctor validator tests:\n";
+
+std::cout << Validator::isValidSpecialization("Cardiology")
+          << std::endl;    
+          
+std::cout << Validator::isValidSpecialization("")
+          << std::endl;
+
     return 0;
 }

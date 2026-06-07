@@ -43,3 +43,15 @@ bool Validator::isValidPesel(const std::string& pesel)
 
     return true;
 }
+
+/**
+ * @brief Validates doctor's specialization.
+ *
+ * @param specialization Doctor specialization.
+ * @return true If specialization is valid.
+ * @return false If specialization is invalid.
+ */
+bool Validator::isValidSpecialization(const std::string& specialization)
+    {
+        return !specialization.empty();
+    }

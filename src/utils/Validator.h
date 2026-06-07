@@ -26,4 +26,14 @@ class Validator
      * @return false If PESEL is invalid.
      */
     static bool isValidPesel(const std::string& pesel);
+
+
+    /**
+    * @brief Validates doctor's specialization.
+     *
+     * @param specialization Specialization to validate.
+     * @return true If specialization is valid.
+     * @return false If specialization is invalid.
+     */
+    static bool isValidSpecialization(const std::string& specialization);
 };
