@@ -165,5 +165,22 @@ if (foundVisit != nullptr)
               << std::endl;
 }
 
+bool removedVisit = visitService.removeVisit(1);
+
+if (removedVisit)
+{
+    std::cout << "Visit removed successfully."
+              << std::endl;
+}
+else
+{
+    std::cout << "Visit not found."
+              << std::endl;
+}
+
+std::cout << "\nVisits after removal:\n";
+
+visitService.displayVisits();
+
     return 0;
 }
