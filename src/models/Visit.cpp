@@ -16,21 +16,41 @@ Visit::Visit(
  {
  }
 
+/**
+ * @brief Gets visit ID.
+ *
+ * @return int Visit identifier.
+ */
 int Visit::getId() const
 {
     return id;
 }
 
+/**
+ * @brief Gets patient ID.
+ *
+ * @return int patient identifier.
+ */
 int Visit::getPatientId() const
 {
     return patientId;
 }
 
+/**
+ * @brief Gets doctor ID.
+ *
+ * @return int doctor identifier.
+ */
 int Visit::getDoctorId() const
 {
     return doctorId;
 }
 
+/**
+ * @brief Gets date.
+ *
+ * @return int date.
+ */
 std::string Visit::getDate() const
 {
     return date;

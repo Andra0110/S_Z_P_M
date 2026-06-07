@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include "../models/Visit.h"
 
 /**
@@ -43,5 +44,19 @@ class VisitService
      * @return false If visit was not found.
      */
     bool removeVisit(int id);
+
+    /**
+     * @brief Checks if doctor is available at given date.
+     *
+     * @param doctorId Doctor identifier.
+     * @param date Appointment date.
+     * @return true If doctor is available.
+     * @return false If conflict exists.
+    */
+    bool isDoctorAvailable(
+        int doctorId,
+        const std::string& date
+    ) const;
+
 
 };

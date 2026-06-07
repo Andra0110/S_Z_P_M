@@ -154,6 +154,24 @@ VisitService visitService;
 
 visitService.addVisit(visit1);
 
+std::cout << "\nConflict test:\n";
+
+bool available = visitService.isDoctorAvailable(
+    1,
+    "2026-06-15 14:00"
+);
+
+if (available)
+{
+    std::cout << "Doctor is available."
+              << std::endl;
+}
+else
+{
+    std::cout << "Conflict detected."
+              << std::endl;
+}
+
 visitService.displayVisits();
 
 Visit* foundVisit = visitService.searchVisitById(1);

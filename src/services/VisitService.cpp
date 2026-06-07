@@ -64,3 +64,29 @@ bool VisitService::removeVisit(int id)
     }
     return false;
 }
+
+/**
+ * @brief Checks if doctor is available at given date.
+ *
+ * @param doctorId Doctor identifier.
+ * @param date Appointment date.
+ * @return true If doctor is available.
+ * @return false If conflict exists.
+ */
+bool VisitService::isDoctorAvailable(
+    int doctorId,
+    const std::string& date
+) const
+{
+    for (const auto& visit : visits)
+    {
+        if (
+        visit.getDoctorId() == doctorId &&
+        visit.getDate() == date
+        )
+        {
+            return false;
+        }
+    }
+    return true;
+}
