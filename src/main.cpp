@@ -200,5 +200,20 @@ std::cout << "\nVisits after removal:\n";
 
 visitService.displayVisits();
 
+
+std::cout << "\nDate validator tests:\n";
+
+std::cout << Validator::isValidDate(
+    "2026-06-15 14:00"
+) << std::endl;
+
+std::cout << Validator::isValidDate(
+    "15.06.2026"
+) << std::endl;
+
+std::cout << Validator::isValidDate(
+    "abc"
+) << std::endl;
+
     return 0;
 }

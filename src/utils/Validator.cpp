@@ -1,6 +1,7 @@
 #include "validator.h"
 
 #include <cctype>
+#include <regex>
 
 /**
  * @brief Validates patient's name.
@@ -55,3 +56,19 @@ bool Validator::isValidSpecialization(const std::string& specialization)
     {
         return !specialization.empty();
     }
+
+/**
+ * @brief Validates appointment date format.
+ *
+ * @param date Date to validate.
+ * @return true If date format is valid.
+ * @return false If date format is invalid.
+ */
+bool Validator::isValidDate(const std::string& date)
+{
+    std::regex pattern(
+        R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2})"
+    );
+
+    return std::regex_match(date, pattern);
+}

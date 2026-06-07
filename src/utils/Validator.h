@@ -36,4 +36,14 @@ class Validator
      * @return false If specialization is invalid.
      */
     static bool isValidSpecialization(const std::string& specialization);
+
+    /**
+     * @brief Validates appointment date format.
+    *
+    * @param date Date to validate.
+    * @return true If date format is valid.
+    * @return false If date format is invalid.
+    */
+    static bool isValidDate(const std::string& date);
+
 };
