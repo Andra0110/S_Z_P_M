@@ -5,6 +5,7 @@
 
 #include "../models/Patient.h"
 #include "../models/Doctor.h"
+#include "../models/Visit.h"
 
 /**
  * @class FileService
@@ -54,5 +55,26 @@ class FileService
     */
     static std::vector<Doctor> loadDoctors(
         const std::string& filename
-    );   
+    );
+    
+    /**
+    * @brief Saves visits to a text file.
+    *
+    * @param visits Vector of visits.
+    * @param filename Output file name.
+    */
+    static void saveVisits(
+        const std::vector<Visit>& visits,
+        const std::string& filename
+    );
+
+    /**
+    * @brief Loads visits from a text file.
+    *
+    * @param filename Input file name.
+    * @return std::vector<Visit> Loaded visits.
+    */
+    static std::vector<Visit> loadVisits(
+        const std::string& filename
+    );
 };

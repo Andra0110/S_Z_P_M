@@ -187,6 +187,11 @@ VisitService visitService;
 
 visitService.addVisit(visit1);
 
+FileService::saveVisits(
+    visitService.getVisits(),
+    "data/visits.txt"
+);
+
 std::cout << "\nConflict test:\n";
 
 bool available = visitService.isDoctorAvailable(
@@ -263,6 +268,25 @@ for (const auto& patient : loadedPatients)
               << patient.getFirstName()
               << " "
               << patient.getLastName()
+              << std::endl;
+}
+
+std::cout << "\nLoading visits from file:\n";
+
+std::vector<Visit> loadedVisits =
+    FileService::loadVisits(
+        "data/visits.txt"
+    );
+
+for (const auto& visit : loadedVisits)
+{
+    std::cout << visit.getId()
+              << " "
+              << visit.getPatientId()
+              << " "
+              << visit.getDoctorId()
+              << " "
+              << visit.getDate()
               << std::endl;
 }
 

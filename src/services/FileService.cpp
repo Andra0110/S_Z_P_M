@@ -134,3 +134,69 @@ std::vector<Doctor> FileService::loadDoctors(
 
     return doctors;
 }
+
+/**
+ * @brief Saves visits to a text file.
+ */
+void FileService::saveVisits(
+    const std::vector<Visit>& visits,
+    const std::string& filename
+)
+{
+    std::ofstream file(filename);
+
+    for (const auto& visit : visits)
+    {
+        file << visit.getId()
+             << ";"
+             << visit.getPatientId()
+             << ";"
+             << visit.getDoctorId()
+             << ";"
+             << visit.getDate()
+             << "\n";
+    }
+
+    file.close();
+}
+
+/**
+ * @brief Loads visits from a text file.
+ */
+std::vector<Visit> FileService::loadVisits(
+    const std::string& filename
+)
+{
+    std::vector<Visit> visits;
+
+    std::ifstream file(filename);
+
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+
+        std::string idStr;
+        std::string patientIdStr;
+        std::string doctorIdStr;
+        std::string date;
+
+        std::getline(ss, idStr, ';');
+        std::getline(ss, patientIdStr, ';');
+        std::getline(ss, doctorIdStr, ';');
+        std::getline(ss, date, ';');
+
+        Visit visit
+        (
+            std::stoi(idStr),
+            std::stoi(patientIdStr),
+            std::stoi(doctorIdStr),
+            date
+        );
+
+        visits.push_back(visit);
+    }
+
+    return visits;
+}

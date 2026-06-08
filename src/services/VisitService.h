@@ -58,5 +58,11 @@ class VisitService
         const std::string& date
     ) const;
 
+    /**
+    * @brief Gets all visits.
+    *
+    * @return const std::vector<Visit>& List of visits.
+    */
+    const std::vector<Visit>& getVisits() const;
 
 };

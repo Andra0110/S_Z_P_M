@@ -90,3 +90,12 @@ bool VisitService::isDoctorAvailable(
     }
     return true;
 }
+
+/**
+ * @brief Gets all visits.
+ *
+ * @return const std::vector<Visit>& List of visits.
+ */
+const std::vector<Visit>& VisitService::getVisits() const{
+    return visits;
+}
