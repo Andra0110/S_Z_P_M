@@ -43,4 +43,11 @@ class DoctorService
      * @return false If doctor was not found.
      */
     bool removeDoctor(int id);
+
+    /**
+    * @brief Gets all doctors.
+    *
+    * @return const std::vector<Doctor>& List of doctors.
+    */
+    const std::vector<Doctor>& getDoctors() const;
 };

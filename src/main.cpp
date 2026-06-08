@@ -109,6 +109,30 @@ DoctorService doctorService;
 
 doctorService.addDoctor(doctor1);
 
+FileService::saveDoctors(
+    doctorService.getDoctors(),
+    "data/doctors.txt"
+);
+
+std::cout << "\nLoading doctors from file:\n";
+
+std::vector<Doctor> loadedDoctors =
+    FileService::loadDoctors(
+        "data/doctors.txt"
+    );
+
+for (const auto& doctor : loadedDoctors)
+{
+    std::cout << doctor.getId()
+              << " "
+              << doctor.getFirstName()
+              << " "
+              << doctor.getLastName()
+              << " "
+              << doctor.getSpecialization()
+              << std::endl;
+}
+
 doctorService.displayDoctors();
 
 Doctor* foundDoctor = doctorService.searchDoctorById(1);

@@ -67,3 +67,13 @@ bool DoctorService::removeDoctor(int id)
 
     return false;
 }
+
+/**
+ * @brief Gets all doctors.
+ *
+ * @return const std::vector<Doctor>& List of doctors.
+ */
+const std::vector<Doctor>& DoctorService::getDoctors() const
+{
+    return doctors;
+}

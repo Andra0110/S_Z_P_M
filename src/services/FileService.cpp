@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
 
 /**
  * @brief Saves patients to a text file.
@@ -67,4 +68,69 @@ std::vector<Patient> FileService::loadPatients(
     }
 
     return patients;
+}
+
+/**
+ * @brief Saves doctors to a text file.
+ */
+void FileService::saveDoctors(
+    const std::vector<Doctor>& doctors,
+    const std::string& filename
+)
+{
+    std::ofstream file(filename);
+
+    for (const auto& doctor : doctors)
+    {
+        file << doctor.getId()
+             << ";"
+             << doctor.getFirstName()
+             << ";"
+             <<doctor.getLastName()
+             << ";"
+             << doctor.getSpecialization()
+             <<"\n";
+    }
+
+    file.close();
+}
+
+/**
+ * @brief Loads doctors from a text file.
+ */
+std::vector<Doctor> FileService::loadDoctors(
+    const std::string& filename
+)
+{
+    std::vector<Doctor> doctors;
+
+    std::ifstream file(filename);
+
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+
+        std::string idStr;
+        std::string firstName;
+        std::string lastName;
+        std::string specialization;
+
+        std::getline(ss, idStr, ',');
+        std::getline(ss, firstName, ',');
+        std::getline(ss, lastName, ',');
+        std::getline(ss, specialization, ',');
+
+        Doctor doctor(
+            std::stoi(idStr),
+            firstName,
+            lastName,
+            specialization
+        );
+
+        doctors.push_back(doctor);
+    }
+
+    return doctors;
 }
