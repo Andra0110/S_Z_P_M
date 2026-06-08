@@ -221,6 +221,48 @@ if (foundVisit != nullptr)
               << std::endl;
 }
 
+std::cout << "\nDetailed visit information:\n";
+
+Patient* visitPatient =
+    patientService.searchPatientById(
+        visit1.getPatientId()
+    );
+
+Doctor* visitDoctor =
+    doctorService.searchDoctorById(
+        visit1.getDoctorId()
+    );
+
+if (
+    visitPatient != nullptr &&
+    visitDoctor != nullptr
+)
+{
+    std::cout << "Visit ID: "
+              << visit1.getId()
+              << std::endl;
+
+    std::cout << "\nPatient: "
+              << visitPatient->getFirstName()
+              << " "
+              << visitPatient->getLastName()
+              << std::endl;
+
+    std::cout << "\nDoctor: "
+              << visitDoctor->getFirstName()
+              << " "
+              << visitDoctor->getLastName()
+              << std::endl;
+
+    std::cout << "Specialization: "
+              << visitDoctor->getSpecialization()
+              << std::endl;
+
+    std::cout << "\nDate: "
+              << visit1.getDate()
+              << std::endl;
+}
+
 bool removedVisit = visitService.removeVisit(1);
 
 if (removedVisit)
