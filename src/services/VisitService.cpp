@@ -116,5 +116,41 @@ bool VisitService::canCreateVisit(
         return false;
     }
 
+    if (
+        doctorService.searchDoctorById(doctorId)
+        == nullptr
+    )
+    {
+        return false;
+    }
+
     return true;
+}
+
+/**
+ * @brief Displays all visits for a patient.
+ */
+void VisitService::displayVisitsByPatient(
+    int patientId
+) const
+{
+    for (const auto& visit : visits)
+    {
+        if (visit.getPatientId() == patientId)
+        {
+            std::cout << "Visit ID: "
+                      << visit.getId()
+                      << std::endl;
+
+            std::cout << "Doctor ID: "
+                      << visit.getDoctorId()
+                      << std::endl;
+
+            std::cout << "Date: "
+                      << visit.getDate()
+                      << std::endl;
+
+            std::cout << std::endl;
+        }
+    }
 }

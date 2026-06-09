@@ -85,4 +85,13 @@ bool canCreateVisit(
     DoctorService& doctorService
 ) const;
 
+/**
+ * @brief Displays all visits for a patient.
+ *
+ * @param patientId Patient identifier.
+ */
+void displayVisitsByPatient(
+    int patientId
+) const;
+
 };

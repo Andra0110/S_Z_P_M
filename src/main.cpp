@@ -170,6 +170,13 @@ Visit visit1(
     "2026-06-15 14:00"
 );
 
+Visit visit2(
+    2,
+    1,
+    1,
+    "2026-06-20 10:00"
+);
+
 std::cout << "\nVisit validation test:\n";
 
 bool validVisit =
@@ -191,6 +198,8 @@ bool validVisit =
                   << std::endl;
     }
 
+std::cout << "\nInvalid visit validation test:\n";
+
 Visit invalidVisit(
     2,
     999,
@@ -204,10 +213,17 @@ bool invalidResult =
         invalidVisit.getDoctorId(),
         patientService,
         doctorService
-    );
-
-std::cout << invalidResult
-          << std::endl;
+);
+    if (invalidResult)
+    {
+        std::cout << "Visit can be created."
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "Invalid patient or doctor."
+                  << std::endl;
+    }
 
 std::cout << "Visit ID: "
           << visit1.getId()
@@ -231,6 +247,7 @@ std::cout << "\n=== VISIT TESTS ===\n";
 std::cout << "\nVisitService test:\n";
 
 visitService.addVisit(visit1);
+visitService.addVisit(visit2);
 
 FileService::saveVisits(
     visitService.getVisits(),
@@ -255,16 +272,23 @@ else
               << std::endl;
 }
 
+std::cout << "\nAll visits:\n";
+
 visitService.displayVisits();
 
-Visit* foundVisit = visitService.searchVisitById(1);
+std::cout
+    << "\nVisits for patient ID 1:\n";
+
+visitService.displayVisitsByPatient(1);
+
+Visit* foundVisit =
+    visitService.searchVisitById(1);
 
 if (foundVisit != nullptr)
 {
-    std::cout << "Visit found: "
+    std::cout << "\nVisit found: "
               << foundVisit->getDate()
               << std::endl;
-}
 
 std::cout << "\nDetailed visit information:\n";
 
@@ -287,13 +311,13 @@ if (
               << visit1.getId()
               << std::endl;
 
-    std::cout << "\nPatient: "
+    std::cout << "Patient: "
               << visitPatient->getFirstName()
               << " "
               << visitPatient->getLastName()
               << std::endl;
 
-    std::cout << "\nDoctor: "
+    std::cout << "Doctor: "
               << visitDoctor->getFirstName()
               << " "
               << visitDoctor->getLastName()
@@ -303,12 +327,15 @@ if (
               << visitDoctor->getSpecialization()
               << std::endl;
 
-    std::cout << "\nDate: "
+    std::cout << "Date: "
               << visit1.getDate()
               << std::endl;
+    }
 }
 
-bool removedVisit = visitService.removeVisit(1);
+
+bool removedVisit =
+    visitService.removeVisit(1);
 
 if (removedVisit)
 {
@@ -324,6 +351,11 @@ else
 std::cout << "\nVisits after removal:\n";
 
 visitService.displayVisits();
+
+std::cout
+    << "\nVisits for patient ID 1 after removal:\n";
+
+visitService.displayVisitsByPatient(1);
 
 
 std::cout << "\nDate validator tests:\n";
