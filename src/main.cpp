@@ -281,6 +281,11 @@ std::cout
 
 visitService.displayVisitsByPatient(1);
 
+std::cout
+    << "\nVisits for doctor ID 1:\n";
+
+visitService.displayVisitsByDoctor(1);
+
 Visit* foundVisit =
     visitService.searchVisitById(1);
 

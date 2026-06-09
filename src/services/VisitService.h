@@ -94,4 +94,13 @@ void displayVisitsByPatient(
     int patientId
 ) const;
 
+/**
+ * @brief Displays all visits for a doctor.
+ *
+ * @param doctorId Doctor identifier.
+ */
+void displayVisitsByDoctor(
+    int doctorId
+) const;
+
 };

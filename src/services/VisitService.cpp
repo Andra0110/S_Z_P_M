@@ -154,3 +154,32 @@ void VisitService::displayVisitsByPatient(
         }
     }
 }
+
+/**
+ * @brief Displays all visits for a doctor.
+ */
+void VisitService::displayVisitsByDoctor(
+    int doctorId
+) const
+{
+    for (const auto& visit : visits)
+    {
+        if (visit.getDoctorId() == doctorId)
+        {
+            std::cout << "Visit ID: "
+                      << visit.getId()
+                      << std::endl;
+
+            std::cout << "Patient ID: "
+                      << visit.getPatientId()
+                      << std::endl;
+
+            std::cout << "Date: "
+                      << visit.getDate()
+                      << std::endl;
+
+            std::cout << std::endl;
+        }
+    }
+}
+
