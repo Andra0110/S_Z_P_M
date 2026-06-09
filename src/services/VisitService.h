@@ -2,6 +2,9 @@
 
 #include <vector>
 #include <string>
+
+#include "PatientService.h"
+#include "DoctorService.h"
 #include "../models/Visit.h"
 
 /**
@@ -64,5 +67,22 @@ class VisitService
     * @return const std::vector<Visit>& List of visits.
     */
     const std::vector<Visit>& getVisits() const;
+
+    /**
+ * @brief Validates if visit can be created.
+ *
+ * @param patientId Patient identifier.
+ * @param doctorId Doctor identifier.
+ * @param patientService Patient service.
+ * @param doctorService Doctor service.
+ * @return true If visit is valid.
+ * @return false If patient or doctor does not exist.
+ */
+bool canCreateVisit(
+    int patientId,
+    int doctorId,
+    PatientService& patientService,
+    DoctorService& doctorService
+) const;
 
 };

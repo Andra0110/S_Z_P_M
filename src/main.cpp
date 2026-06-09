@@ -12,6 +12,8 @@
 
 int main()
 {
+    std::cout << "\n=== PATIENT TESTS ===\n";
+
     PatientService patientService;
 
     Patient patient1(1, "Anna", "Kowalska", "12345678901");
@@ -44,12 +46,13 @@ int main()
                   << std::endl;
     }
 
+/*
     bool removed = patientService.removePatient(1);
 
     if (removed)
     {
-        std::cout << "Patient removed successfully."
-                  << std::endl;  
+       std::cout << "Patient removed successfully."
+                 << std::endl;  
     }
     else
     {
@@ -74,8 +77,9 @@ int main()
 
     std::cout << Validator::isValidPesel("12345")
               << std::endl;
-              
+ */             
 
+std::cout << "\n=== DOCTOR TESTS ===\n";
 
 std::cout << "\nDoctor test:\n";
 
@@ -157,12 +161,53 @@ std::cout << Validator::isValidSpecialization("")
 
 std::cout << "\nVisit test:\n";
 
+VisitService visitService;
+
 Visit visit1(
     1,
     1,
     1,
     "2026-06-15 14:00"
 );
+
+std::cout << "\nVisit validation test:\n";
+
+bool validVisit =
+    visitService.canCreateVisit(
+        visit1.getPatientId(),
+        visit1.getDoctorId(),
+        patientService,
+        doctorService
+    );
+
+    if (validVisit)
+    {
+        std::cout <<"Visit can be created."
+                  << std::endl; 
+    }
+    else
+    {
+        std::cout <<"Invalid patient or doctor."
+                  << std::endl;
+    }
+
+Visit invalidVisit(
+    2,
+    999,
+    888,
+    "2026-06-20 12:00"
+);
+
+bool invalidResult =
+    visitService.canCreateVisit(
+        invalidVisit.getPatientId(),
+        invalidVisit.getDoctorId(),
+        patientService,
+        doctorService
+    );
+
+std::cout << invalidResult
+          << std::endl;
 
 std::cout << "Visit ID: "
           << visit1.getId()
@@ -181,9 +226,9 @@ std::cout << "Date: "
           << std::endl;
 
 
-std::cout << "\nVisitService test:\n";
+std::cout << "\n=== VISIT TESTS ===\n";
 
-VisitService visitService;
+std::cout << "\nVisitService test:\n";
 
 visitService.addVisit(visit1);
 

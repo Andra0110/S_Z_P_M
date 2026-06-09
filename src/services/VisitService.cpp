@@ -1,4 +1,5 @@
 #include "VisitService.h"
+
 #include <iostream>
 
 /**
@@ -98,4 +99,22 @@ bool VisitService::isDoctorAvailable(
  */
 const std::vector<Visit>& VisitService::getVisits() const{
     return visits;
+}
+
+bool VisitService::canCreateVisit(
+    int patientId,
+    int doctorId,
+    PatientService& patientService,
+    DoctorService& doctorService
+) const
+{
+    if (
+        patientService.searchPatientById(patientId)
+        == nullptr
+    )
+    {
+        return false;
+    }
+
+    return true;
 }
