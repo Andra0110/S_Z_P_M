@@ -4,7 +4,7 @@
 #include "services/FileService.h"
 
 int main() {
-    std::cout << "\n=== PATRYCJA'S EDGE CASE TESTS ===\n";
+    std::cout << "\n=== EDGE CASE TESTS ===\n";
 
     bool isInvalidPeselValid = Validator::isValidPesel("123");
     if (isInvalidPeselValid == false) {
