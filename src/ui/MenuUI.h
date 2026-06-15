@@ -25,10 +25,48 @@ public:
     );
 
 private:
-    // Tutaj w przyszłości dodamy prywatne metody pomocnicze dla podmenu, np.:
-    // static void handlePatientMenu(PatientService& patients);
-    // static void handleDoctorMenu(DoctorService& doctors);
-    // static void handleVisitMenu(VisitService& visits, PatientService& patients, DoctorService& doctors);
+    
+};
+
+#ifndef MENU_UI_H
+#define MENU_UI_H
+
+#include "../services/PatientService.h"
+#include "../services/Validator.h"
+#include <iostream>
+#include <string>
+#include <limits>
+
+/**
+ * @class MenuUI
+ * @brief Class managing the Command Line Interface (CLI) of the application.
+ */
+class MenuUI {
+private:
+    PatientService& patientService; 
+
+    void handlePatientMenu();
+    void displayPatientMenu() const;
+    void addNewPatient();
+    void displayAllPatients() const;
+    void searchPatient() const;
+    void updatePatient();
+    void deletePatient();
+
+    void clearInputBuffer() const;
+    std::string getValidatedInput(const std::string& prompt, bool (*validationFunc)(const std::string&)) const;
+
+public:
+    /**
+     * @brief Constructor for the MenuUI class.
+     * @param pService Reference to the PatientService.
+     */
+    explicit MenuUI(PatientService& pService);
+
+    /**
+     * @brief Main loop running the core application menu.
+     */
+    void run();
 };
 
 #endif

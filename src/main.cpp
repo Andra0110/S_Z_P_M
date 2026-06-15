@@ -1,34 +1,45 @@
 #include "tests/PatientTests.h"
 #include "tests/DoctorTests.h"
 #include "tests/VisitTests.h"
+#include "src/ui/MenuUI.h"
+#include "src/services/PatientService.h"
+#include "src/services/DoctorService.h"
+#include "src/services/VisitService.h"
+#include <iostream>
 
 /**
- * @brief Main entry point for the test execution suite.
- *
- * This function initializes the core business logic services (Patient, Doctor, Visit)
- * and sequentially passes them to dedicated test routines to verify system integrity,
- * data validation rules, and file persistence mechanisms.
- *
+ * @brief Main execution function.
  * @return int Execution status (0 for success).
  */
-int main()
+int main() 
 {
     PatientService patientService;
     DoctorService doctorService;
     VisitService visitService;
 
-    // Uruchomienie izolowanych testów modułu pacjentów
+    std::cout << "===========================================\n";
+    std::cout << "RUNNING AUTOMATED BACKEND TESTS...\n";
+    std::cout << "===========================================\n";
+
+
     testPatients(patientService);
+    std::cout << "[SUCCESS] Patient module tests passed.\n";
 
-    // Uruchomienie izolowanych testów modułu lekarzy
+    // 3. Execute isolated doctor module tests
     testDoctors(doctorService);
+    std::cout << "[SUCCESS] Doctor module tests passed.\n";
 
-    // Uruchomienie testów integracyjnych modułu wizyt (wymaga powiązań między serwisami)
-    testVisits(
-        patientService,
-        doctorService,
-        visitService
-    );
+    // 4. Execute integration tests for the visit module (requires service cross-references)
+    testVisits(patientService, doctorService, visitService);
+    std::cout << "[SUCCESS] Visit module integration tests passed.\n";
+
+    std::cout << "\nAll automated tests completed successfully!\n";
+    std::cout << "Press Enter to launch the interactive menu...";
+    std::cin.get(); // Wait for user acknowledgment before clearing screen/opening menu
+
+    // 5. Inject dependencies into the UI layer and run the application
+    MenuUI ui(patientService);
+    ui.run();
 
     return 0;
 }
