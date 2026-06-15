@@ -2,8 +2,8 @@
 #include <iostream>
 #include <limits>
 
-MenuUI::MenuUI(PatientService& pService, DoctorService& dService) 
-    : patientService(pService), doctorService(dService) {}
+MenuUI::MenuUI(PatientService& pService, DoctorService& dService, VisitService& vService) 
+    : patientService(pService), doctorService(dService), visitService(vService) {}
 
 void MenuUI::run() {
     int choice = 0;
@@ -11,6 +11,7 @@ void MenuUI::run() {
         std::cout << "\n=== CLINIC MANAGEMENT SYSTEM ===\n";
         std::cout << "1. Patient Management\n";
         std::cout << "2. Doctor Management\n";
+        std::cout << "3. Visit Management\n";
         std::cout << "0. Exit\n";
         std::cout << "Enter your choice: ";
 
@@ -25,6 +26,8 @@ void MenuUI::run() {
             handlePatientMenu();
         } else if (choice == 2) {
             handleDoctorMenu();
+        } else if (choice == 3) {
+            handleVisitMenu();
         } else if (choice == 0) {
             std::cout << "Exiting system. Goodbye!\n";
             break;
@@ -61,7 +64,7 @@ void MenuUI::displayPatientMenu() const {
     std::cout << "\n--- PATIENT MANAGEMENT ---\n";
     std::cout << "1. Add New Patient\n";
     std::cout << "2. Display All Patients\n";
-    std::cout << "3. Search Patient (by PESEL)\n";
+    std::cout << "3. Search Patient (by ID)\n";
     std::cout << "4. Edit Patient Data\n";
     std::cout << "5. Delete Patient\n";
     std::cout << "0. Return to Main Menu\n";
@@ -70,47 +73,53 @@ void MenuUI::displayPatientMenu() const {
 
 void MenuUI::addNewPatient() {
     std::cout << "\n[ADD NEW PATIENT]\n";
+    int id;
+    std::cout << "Enter Patient ID (number): ";
+    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    if (patientService.searchPatientById(id) != nullptr) {
+        std::cout << "Error: A patient with this ID already exists.\n";
+        return;
+    }
+
     std::string firstName = getValidatedInput("Enter first name: ", Validator::validateName);
     std::string lastName = getValidatedInput("Enter last name: ", Validator::validateName);
     std::string pesel = getValidatedInput("Enter PESEL (11 digits): ", Validator::validatePesel);
 
-    if (patientService.findPatientByPesel(pesel) != nullptr) {
-        std::cout << "Error: A patient with this PESEL already exists.\n";
-        return;
-    }
-
-    Patient newPatient(firstName, lastName, pesel);
+    Patient newPatient(id, firstName, lastName, pesel);
     patientService.addPatient(newPatient);
     std::cout << "Success: Patient has been successfully added.\n";
 }
 
 void MenuUI::displayAllPatients() const {
     std::cout << "\n[PATIENT LIST]\n";
-    const auto& patients = patientService.getAllPatients();
-    if (patients.empty()) {
-        std::cout << "No registered patients found.\n";
-        return;
-    }
-    for (const auto& patient : patients) {
-        std::cout << "PESEL: " << patient.getPesel() << " | " << patient.getLastName() << ", " << patient.getFirstName() << "\n";
-    }
+    patientService.displayPatients(); 
 }
 
 void MenuUI::searchPatient() const {
     std::cout << "\n[SEARCH PATIENT]\n";
-    std::string pesel = getValidatedInput("Enter patient's PESEL: ", Validator::validatePesel);
-    Patient* patient = patientService.findPatientByPesel(pesel);
+    int id;
+    std::cout << "Enter Patient ID: ";
+    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    Patient* patient = patientService.searchPatientById(id);
     if (patient != nullptr) {
         std::cout << "Patient found:\n- Name: " << patient->getFirstName() << " " << patient->getLastName() << "\n";
     } else {
-        std::cout << "Info: No patient found.\n";
+        std::cout << "Info: No patient found with this ID.\n";
     }
 }
 
 void MenuUI::updatePatient() {
     std::cout << "\n[EDIT PATIENT DATA]\n";
-    std::string pesel = getValidatedInput("Enter PESEL to edit: ", Validator::validatePesel);
-    Patient* patient = patientService.findPatientByPesel(pesel);
+    int id;
+    std::cout << "Enter Patient ID to edit: ";
+    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    Patient* patient = patientService.searchPatientById(id);
     if (patient == nullptr) {
         std::cout << "Error: Patient does not exist.\n";
         return;
@@ -124,17 +133,18 @@ void MenuUI::updatePatient() {
 
 void MenuUI::deletePatient() {
     std::cout << "\n[DELETE PATIENT]\n";
-    std::string pesel = getValidatedInput("Enter PESEL to delete: ", Validator::validatePesel);
-    if (patientService.deletePatientByPesel(pesel)) {
+    int id;
+    std::cout << "Enter Patient ID to delete: ";
+    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    if (patientService.removePatient(id)) {
         std::cout << "Success: Patient removed.\n";
     } else {
         std::cout << "Error: Patient not found.\n";
     }
 }
 
-// ============================================================================
-// BEZPIECZNA SEKCJA LEKARZY (#46)
-// ============================================================================
 void MenuUI::handleDoctorMenu() {
     int choice = 0;
     while (true) {
@@ -190,7 +200,6 @@ void MenuUI::addNewDoctor() {
 
 void MenuUI::displayAllDoctors() const {
     std::cout << "\n[DOCTOR LIST]\n";
-    // Używamy gotowej metody Twojej koleżanki, która sama wszystko wypisze na ekran!
     doctorService.displayDoctors(); 
 }
 
@@ -212,9 +221,103 @@ void MenuUI::searchDoctor() const {
     }
 }
 
-// ============================================================================
-// METODY POMOCNICZE
-// ============================================================================
+void MenuUI::handleVisitMenu() {
+    int choice = 0;
+    while (true) {
+        displayVisitMenu();
+        if (!(std::cin >> choice)) {
+            std::cout << "Invalid input. Please enter a number.\n";
+            clearInputBuffer();
+            continue;
+        }
+        std::cin.ignore();
+
+        switch (choice) {
+            case 1: addNewVisit(); break;
+            case 2: displayAllVisits(); break;
+            case 3: searchVisit(); break;
+            case 4: cancelVisit(); break;
+            case 0: return;
+            default: std::cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
+
+void MenuUI::displayVisitMenu() const {
+    std::cout << "\n--- VISIT MANAGEMENT ---\n";
+    std::cout << "1. Book New Visit\n";
+    std::cout << "2. Display All Visits\n";
+    std::cout << "3. Search Visit (by ID)\n";
+    std::cout << "4. Cancel/Remove Visit\n";
+    std::cout << "0. Return to Main Menu\n";
+    std::cout << "Enter your choice: ";
+}
+
+void MenuUI::addNewVisit() {
+    std::cout << "\n[BOOK NEW VISIT]\n";
+    
+    int id, patientId, doctorId;
+    std::cout << "Enter custom Visit ID (number): ";
+    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    
+    std::cout << "Enter Patient ID (number): ";
+    while (!(std::cin >> patientId)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    
+    std::cout << "Enter Doctor ID (number): ";
+    while (!(std::cin >> doctorId)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    std::string date = getValidatedInput("Enter Date (YYYY-MM-DD): ", Validator::validateName);
+
+    if (!visitService.canCreateVisit(patientId, doctorId, patientService, doctorService)) {
+        std::cout << "Error: Provided Patient ID or Doctor ID does not exist in the system!\n";
+        return;
+    }
+
+    if (!visitService.isDoctorAvailable(doctorId, date)) {
+        std::cout << "Error: The doctor is already booked on this date!\n";
+        return;
+    }
+
+    Visit newVisit(id, patientId, doctorId, date);
+    visitService.addVisit(newVisit);
+    std::cout << "Success: Visit booked successfully.\n";
+}
+
+void MenuUI::displayAllVisits() const {
+    std::cout << "\n[ALL BOOKED VISITS]\n";
+    visitService.displayVisits(); 
+}
+
+void MenuUI::searchVisit() const {
+    std::cout << "\n[SEARCH VISIT]\n";
+    int id;
+    std::cout << "Enter Visit ID: ";
+    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    Visit* visit = visitService.searchVisitById(id);
+    if (visit != nullptr) {
+        std::cout << "Success: Visit found with ID: " << id << "\n";
+    } else {
+        std::cout << "Info: No visit found with this ID.\n";
+    }
+}
+
+void MenuUI::cancelVisit() {
+    std::cout << "\n[CANCEL VISIT]\n";
+    int id;
+    std::cout << "Enter Visit ID to cancel: ";
+    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    std::cin.ignore();
+
+    if (visitService.removeVisit(id)) {
+        std::cout << "Success: Visit has been cancelled.\n";
+    } else {
+        std::cout << "Error: Visit not found.\n";
+    }
+}
+
 void MenuUI::clearInputBuffer() const {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

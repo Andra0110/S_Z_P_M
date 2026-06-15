@@ -3,14 +3,15 @@
 
 #include "../services/PatientService.h"
 #include "../services/DoctorService.h"
+#include "../services/VisitService.h" 
 #include "../utils/Validator.h"
 
 class MenuUI {
 private:
     PatientService& patientService;
     DoctorService& doctorService;
+    VisitService& visitService;         
 
-    // Sekcja Pacjentów
     void handlePatientMenu();
     void displayPatientMenu() const;
     void addNewPatient();
@@ -19,20 +20,25 @@ private:
     void updatePatient();
     void deletePatient();
 
-    // Sekcja Lekarzy (#46)
     void handleDoctorMenu();
     void displayDoctorMenu() const;
     void addNewDoctor();
     void displayAllDoctors() const;
     void searchDoctor() const;
 
-    // Funkcje pomocnicze
+    void handleVisitMenu();
+    void displayVisitMenu() const;
+    void addNewVisit();
+    void displayAllVisits() const;
+    void searchVisit() const;
+    void cancelVisit();
+
     void clearInputBuffer() const;
     std::string getValidatedInput(const std::string& prompt, bool (*validationFunc)(const std::string&)) const;
 
 public:
-    MenuUI(PatientService& pService, DoctorService& dService);
+    MenuUI(PatientService& pService, DoctorService& dService, VisitService& vService);
     void run();
 };
 
-#endif // MENUUI_H
+#endif
