@@ -56,4 +56,22 @@ class Patient
          * @return std::string Patient PESEL.
          */
         std::string getPesel() const;
+
+        /**
+         * @brief Sets a new first name for the patient.
+         * * @param firstName The new first name.
+         */
+        void setFirstName(const std::string& firstName);
+
+        /**
+         * @brief Sets a new last name for the patient.
+         * * @param lastName The new last name.
+         */
+        void setLastName(const std::string& lastName);
+
+        /**
+         * @brief Sets a new PESEL number for the patient.
+         * * @param pesel The new PESEL number.
+         */
+        void setPesel(const std::string& pesel);        
 };

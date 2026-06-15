@@ -2,23 +2,40 @@
 #include <vector>
 
 #include "VisitTests.h"
-
 #include "../models/Patient.h"
 #include "../models/Doctor.h"
 #include "../models/Visit.h"
-
 #include "../services/FileService.h"
 #include "../utils/Validator.h"
 
+/**
+ * @brief Executes integration tests for the Visit module.
+ *
+ * @param patientService Reference to the active PatientService.
+ * @param doctorService Reference to the active DoctorService.
+ * @param visitService Reference to the VisitService instance to be tested.
+ */
 void testVisits(
     PatientService& patientService,
     DoctorService& doctorService,
     VisitService& visitService
 )
-    {
-    std::cout << "\nVisit test:\n";
+{
+    std::cout << "\n=== VISIT TESTS ===\n";
 
+    // Rejestracja testowego pacjenta i lekarza (wymagane do poprawnej walidacji wizyt)
+    Patient mockPatient(1, "Anna", "Kowalska", "12345678901");
+    Doctor mockDoctor(1, "Jan", "Nowak", "Cardiology");
+    
+    // Dodajemy do serwisów (jeśli jeszcze nie istnieją z poprzednich testów)
+    if (patientService.searchPatientById(1) == nullptr) {
+        patientService.addPatient(mockPatient);
+    }
+    if (doctorService.searchDoctorById(1) == nullptr) {
+        doctorService.addDoctor(mockDoctor);
+    }
 
+    // Tworzenie obiektów wizyt
     Visit visit1(
         1,
         1,
@@ -33,29 +50,24 @@ void testVisits(
         "2026-06-20 10:00"
     );
 
-    std::cout << "\nVisit validation test:\n";
+    std::cout << "\n[TEST] Visit validation test (Existing Patient & Doctor):\n";
+    bool validVisit = visitService.canCreateVisit(
+        visit1.getPatientId(),
+        visit1.getDoctorId(),
+        patientService,
+        doctorService
+    );
 
-    bool validVisit =
-        visitService.canCreateVisit(
-            visit1.getPatientId(),
-            visit1.getDoctorId(),
-            patientService,
-            doctorService
-        );
+    if (validVisit)
+    {
+        std::cout << "Result: Visit can be created.\n";
+    }
+    else
+    {
+        std::cout << "Result: Invalid patient or doctor.\n";
+    }
 
-        if (validVisit)
-        {
-            std::cout <<"Visit can be created."
-                    << std::endl; 
-        }
-        else
-        {
-            std::cout <<"Invalid patient or doctor."
-                    << std::endl;
-        }
-
-    std::cout << "\nInvalid visit validation test:\n";
-
+    std::cout << "\n[TEST] Invalid visit validation test (Non-existent entities):\n";
     Visit invalidVisit(
         2,
         999,
@@ -63,55 +75,39 @@ void testVisits(
         "2026-06-20 12:00"
     );
 
-    bool invalidResult =
-        visitService.canCreateVisit(
-            invalidVisit.getPatientId(),
-            invalidVisit.getDoctorId(),
-            patientService,
-            doctorService
+    bool invalidResult = visitService.canCreateVisit(
+        invalidVisit.getPatientId(),
+        invalidVisit.getDoctorId(),
+        patientService,
+        doctorService
     );
-        if (invalidResult)
-        {
-            std::cout << "Visit can be created."
-                    << std::endl;
-        }
-        else
-        {
-            std::cout << "Invalid patient or doctor."
-                    << std::endl;
-        }
+    
+    if (invalidResult)
+    {
+        std::cout << "Result: Visit can be created.\n";
+    }
+    else
+    {
+        std::cout << "Result: Invalid patient or doctor (Correctly blocked).\n";
+    }
 
-    std::cout << "Visit ID: "
-            << visit1.getId()
-            << std::endl;
+    std::cout << "\n[TEST] Displaying basic visit info:\n";
+    std::cout << "Visit ID: " << visit1.getId() << "\n";
+    std::cout << "Patient ID: " << visit1.getPatientId() << "\n";
+    std::cout << "Doctor ID: " << visit1.getDoctorId() << "\n";
+    std::cout << "Date: " << visit1.getDate() << "\n";
 
-    std::cout << "Patient ID: "
-            << visit1.getPatientId()
-            << std::endl;
-
-    std::cout << "Doctor ID: "
-            << visit1.getDoctorId()
-            << std::endl;
-
-    std::cout << "Date: "
-            << visit1.getDate()
-            << std::endl;
-
-
-    std::cout << "\n=== VISIT TESTS ===\n";
-
-    std::cout << "\nVisitService test:\n";
-
+    std::cout << "\n[TEST] VisitService Registration & File Serialization:\n";
     visitService.addVisit(visit1);
     visitService.addVisit(visit2);
 
+    // Zmieniono ścieżkę z "data/visits.txt" na "visits.txt"
     FileService::saveVisits(
         visitService.getVisits(),
-        "data/visits.txt"
+        "visits.txt"
     );
 
-    std::cout << "\nConflict test:\n";
-
+    std::cout << "\n[TEST] Doctor Availability Conflict test:\n";
     bool available = visitService.isDoctorAvailable(
         1,
         "2026-06-15 14:00"
@@ -119,154 +115,79 @@ void testVisits(
 
     if (available)
     {
-        std::cout << "Doctor is available."
-                << std::endl;
+        std::cout << "Result: Doctor is available.\n";
     }
     else
     {
-        std::cout << "Conflict detected."
-                << std::endl;
+        std::cout << "Result: Conflict detected (Correctly blocked).\n";
     }
 
-    std::cout << "\nAll visits:\n";
-
+    std::cout << "\n--- All visits ---\n";
     visitService.displayVisits();
 
-    std::cout
-        << "\nVisits for patient ID 1:\n";
-
+    std::cout << "\n--- Visits for patient ID 1 ---\n";
     visitService.displayVisitsByPatient(1);
 
-    std::cout
-        << "\nVisits for doctor ID 1:\n";
-
+    std::cout << "\n--- Visits for doctor ID 1 ---\n";
     visitService.displayVisitsByDoctor(1);
 
-    Visit* foundVisit =
-        visitService.searchVisitById(1);
+    Visit* foundVisit = visitService.searchVisitById(1);
 
     if (foundVisit != nullptr)
     {
-        std::cout << "\nVisit found: "
-                << foundVisit->getDate()
-                << std::endl;
+        std::cout << "\n[TEST] Visit found by ID. Date: " << foundVisit->getDate() << "\n";
+        std::cout << "\nDetailed visit information:\n";
 
-    std::cout << "\nDetailed visit information:\n";
+        Patient* visitPatient = patientService.searchPatientById(visit1.getPatientId());
+        Doctor* visitDoctor = doctorService.searchDoctorById(visit1.getDoctorId());
 
-    Patient* visitPatient =
-        patientService.searchPatientById(
-            visit1.getPatientId()
-        );
-
-    Doctor* visitDoctor =
-        doctorService.searchDoctorById(
-            visit1.getDoctorId()
-        );
-
-    if (
-        visitPatient != nullptr &&
-        visitDoctor != nullptr
-    )
-    {
-        std::cout << "Visit ID: "
-                << visit1.getId()
-                << std::endl;
-
-        std::cout << "Patient: "
-                << visitPatient->getFirstName()
-                << " "
-                << visitPatient->getLastName()
-                << std::endl;
-
-        std::cout << "Doctor: "
-                << visitDoctor->getFirstName()
-                << " "
-                << visitDoctor->getLastName()
-                << std::endl;
-
-        std::cout << "Specialization: "
-                << visitDoctor->getSpecialization()
-                << std::endl;
-
-        std::cout << "Date: "
-                << visit1.getDate()
-                << std::endl;
+        if (visitPatient != nullptr && visitDoctor != nullptr)
+        {
+            std::cout << "Visit ID: " << visit1.getId() << "\n";
+            std::cout << "Patient: " << visitPatient->getFirstName() << " " << visitPatient->getLastName() << "\n";
+            std::cout << "Doctor: " << visitDoctor->getFirstName() << " " << visitDoctor->getLastName() << "\n";
+            std::cout << "Specialization: " << visitDoctor->getSpecialization() << "\n";
+            std::cout << "Date: " << visit1.getDate() << "\n";
         }
     }
 
-
-    bool removedVisit =
-        visitService.removeVisit(1);
+    std::cout << "\n[TEST] Removing Visit ID 1:\n";
+    bool removedVisit = visitService.removeVisit(1);
 
     if (removedVisit)
     {
-        std::cout << "Visit removed successfully."
-                << std::endl;
+        std::cout << "Result: Visit removed successfully.\n";
     }
     else
     {
-        std::cout << "Visit not found."
-                << std::endl;
+        std::cout << "Result: Visit not found.\n";
     }
 
-    std::cout << "\nVisits after removal:\n";
-
+    std::cout << "\n--- Visits after removal ---\n";
     visitService.displayVisits();
 
-    std::cout
-        << "\nVisits for patient ID 1 after removal:\n";
-
+    std::cout << "\n--- Visits for patient ID 1 after removal ---\n";
     visitService.displayVisitsByPatient(1);
 
+    std::cout << "\n[TEST] Date validator format tests:\n";
+    std::cout << "Is '2026-06-15 14:00' valid? " << Validator::isValidDate("2026-06-15 14:00") << "\n";
+    std::cout << "Is '15.06.2026' valid? " << Validator::isValidDate("15.06.2026") << "\n";
+    std::cout << "Is 'abc' valid? " << Validator::isValidDate("abc") << "\n";
 
-    std::cout << "\nDate validator tests:\n";
-
-    std::cout << Validator::isValidDate(
-        "2026-06-15 14:00"
-    ) << std::endl;
-
-    std::cout << Validator::isValidDate(
-        "15.06.2026"
-    ) << std::endl;
-
-    std::cout << Validator::isValidDate(
-        "abc"
-    ) << std::endl;
-
-
-    std::cout << "\nLoading patients from file:\n";
-
-    std::vector<Patient> loadedPatients =
-        FileService::loadPatients(
-            "data/patients.txt"
-        );
-
+    std::cout << "\n[TEST] Loading patients from backup file:\n";
+    std::vector<Patient> loadedPatients = FileService::loadPatients("patients.txt");
     for (const auto& patient : loadedPatients)
     {
-        std::cout << patient.getId()
-                << " "
-                << patient.getFirstName()
-                << " "
-                << patient.getLastName()
-                << std::endl;
+        std::cout << " - " << patient.getId() << " " << patient.getFirstName() << " " << patient.getLastName() << "\n";
     }
 
-    std::cout << "\nLoading visits from file:\n";
-
-    std::vector<Visit> loadedVisits =
-        FileService::loadVisits(
-            "data/visits.txt"
-        );
-
-        for (const auto& visit : loadedVisits)
-        {
-            std::cout << visit.getId()
-                    << " "
-                    << visit.getPatientId()
-                    << " "
-                    << visit.getDoctorId()
-                    << " "
-                    << visit.getDate()
-                    << std::endl;
-        }
+    std::cout << "\n[TEST] Loading visits from backup file:\n";
+    std::vector<Visit> loadedVisits = FileService::loadVisits("visits.txt");
+    for (const auto& visit : loadedVisits)
+    {
+        std::cout << " - Visit ID: " << visit.getId() 
+                  << " | Patient ID: " << visit.getPatientId() 
+                  << " | Doctor ID: " << visit.getDoctorId() 
+                  << " | Date: " << visit.getDate() << "\n";
+    }
 }

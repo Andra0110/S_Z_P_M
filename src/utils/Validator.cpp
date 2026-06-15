@@ -1,10 +1,14 @@
-#include "validator.h"
+#include "Validator.h"
 
 #include <cctype>
 #include <regex>
 
 /**
- * @brief Validates patient's name.
+ * @brief Validates patient's first or last name.
+ *
+ * @param name Name to validate.
+ * @return true If name is valid.
+ * @return false If name is invalid.
  */
 bool Validator::isValidName(const std::string& name)
 {
@@ -15,7 +19,8 @@ bool Validator::isValidName(const std::string& name)
 
     for (char character : name)
     {
-        if (!std::isalpha(character))
+        // Zapewniamy bezpieczne rzutowanie oraz dopuszczamy spacje i myślniki (przydatne przy nazwiskach)
+        if (!std::isalpha(static_cast<unsigned char>(character)) && character != ' ' && character != '-')
         {
             return false;
         }
@@ -26,6 +31,10 @@ bool Validator::isValidName(const std::string& name)
 
 /**
  * @brief Validates PESEL number.
+ *
+ * @param pesel PESEL to validate.
+ * @return true If PESEL is valid.
+ * @return false If PESEL is invalid.
  */
 bool Validator::isValidPesel(const std::string& pesel)
 {
@@ -36,7 +45,7 @@ bool Validator::isValidPesel(const std::string& pesel)
 
     for (char character : pesel)
     {
-        if (!std::isdigit(character))
+        if (!std::isdigit(static_cast<unsigned char>(character)))
         {
             return false;
         }
@@ -53,19 +62,33 @@ bool Validator::isValidPesel(const std::string& pesel)
  * @return false If specialization is invalid.
  */
 bool Validator::isValidSpecialization(const std::string& specialization)
+{
+    if (specialization.empty())
     {
-        return !specialization.empty();
+        return false;
     }
+
+    for (char character : specialization)
+    {
+        if (!std::isalpha(static_cast<unsigned char>(character)) && character != ' ' && character != '-')
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 /**
  * @brief Validates appointment date format.
  *
  * @param date Date to validate.
- * @return true If date format is valid.
+ * @return true If date format matches YYYY-MM-DD HH:MM.
  * @return false If date format is invalid.
  */
 bool Validator::isValidDate(const std::string& date)
 {
+    // Wyrażenie regularne doskonale pilnuje układu cyfr i separatorów
     std::regex pattern(
         R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2})"
     );

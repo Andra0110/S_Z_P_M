@@ -49,9 +49,19 @@ int Visit::getDoctorId() const
 /**
  * @brief Gets date.
  *
- * @return int date.
+ * @return std::string Appointment date.
  */
 std::string Visit::getDate() const
 {
     return date;
+}
+
+/**
+ * @brief Sets a new appointment date.
+ *
+ * @param newDate The new date string to set for the visit.
+ */
+void Visit::setDate(const std::string& newDate)
+{
+    this->date = newDate;
 }

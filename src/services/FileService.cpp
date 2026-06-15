@@ -4,9 +4,13 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <iostream>
 
 /**
  * @brief Saves patients to a text file.
+ *
+ * @param patients Vector of patients.
+ * @param filename Output file name.
  */
 void FileService::savePatients(
     const std::vector<Patient>& patients,
@@ -14,6 +18,11 @@ void FileService::savePatients(
 )
 {
     std::ofstream file(filename);
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Could not open file " << filename << " for writing.\n";
+        return;
+    }
 
     for (const auto& patient : patients)
     {
@@ -32,19 +41,27 @@ void FileService::savePatients(
 
 /**
  * @brief Loads patients from a text file.
+ *
+ * @param filename Input file name.
+ * @return std::vector<Patient> Loaded patients.
  */
 std::vector<Patient> FileService::loadPatients(
     const std::string& filename
 )
 {
     std::vector<Patient> patients;
-
     std::ifstream file(filename);
+    
+    if (!file.is_open())
+    {
+        return patients; // Zwraca pusty wektor, jeśli plik nie istnieje
+    }
 
     std::string line;
-
     while (std::getline(file, line))
     {
+        if (line.empty()) continue; // Pomija puste linie
+
         std::stringstream ss(line);
 
         std::string idStr;
@@ -52,26 +69,37 @@ std::vector<Patient> FileService::loadPatients(
         std::string lastName;
         std::string pesel;
 
-        std::getline(ss, idStr, ';');
-        std::getline(ss, firstName, ';');
-        std::getline(ss, lastName, ';');
-        std::getline(ss, pesel, ';');
-
-        Patient patient(
-            std::stoi(idStr),
-            firstName,
-            lastName,
-            pesel
-        );
-
-        patients.push_back(patient);
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, firstName, ';') &&
+            std::getline(ss, lastName, ';') &&
+            std::getline(ss, pesel, ';'))
+        {
+            try
+            {
+                Patient patient(
+                    std::stoi(idStr),
+                    firstName,
+                    lastName,
+                    pesel
+                );
+                patients.push_back(patient);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Error parsing patient data: " << e.what() << "\n";
+            }
+        }
     }
 
+    file.close();
     return patients;
 }
 
 /**
  * @brief Saves doctors to a text file.
+ *
+ * @param doctors Vector of doctors.
+ * @param filename Output file name.
  */
 void FileService::saveDoctors(
     const std::vector<Doctor>& doctors,
@@ -79,6 +107,11 @@ void FileService::saveDoctors(
 )
 {
     std::ofstream file(filename);
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Could not open file " << filename << " for writing.\n";
+        return;
+    }
 
     for (const auto& doctor : doctors)
     {
@@ -86,10 +119,10 @@ void FileService::saveDoctors(
              << ";"
              << doctor.getFirstName()
              << ";"
-             <<doctor.getLastName()
+             << doctor.getLastName()
              << ";"
              << doctor.getSpecialization()
-             <<"\n";
+             << "\n";
     }
 
     file.close();
@@ -97,19 +130,27 @@ void FileService::saveDoctors(
 
 /**
  * @brief Loads doctors from a text file.
+ *
+ * @param filename Input file name.
+ * @return std::vector<Doctor> Loaded doctors.
  */
 std::vector<Doctor> FileService::loadDoctors(
     const std::string& filename
 )
 {
     std::vector<Doctor> doctors;
-
     std::ifstream file(filename);
 
-    std::string line;
+    if (!file.is_open())
+    {
+        return doctors;
+    }
 
+    std::string line;
     while (std::getline(file, line))
     {
+        if (line.empty()) continue;
+
         std::stringstream ss(line);
 
         std::string idStr;
@@ -117,26 +158,38 @@ std::vector<Doctor> FileService::loadDoctors(
         std::string lastName;
         std::string specialization;
 
-        std::getline(ss, idStr, ',');
-        std::getline(ss, firstName, ',');
-        std::getline(ss, lastName, ',');
-        std::getline(ss, specialization, ',');
-
-        Doctor doctor(
-            std::stoi(idStr),
-            firstName,
-            lastName,
-            specialization
-        );
-
-        doctors.push_back(doctor);
+        // POPRAWIONE: Zmiana ',' na ';' w celu zachowania spójności z zapisem
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, firstName, ';') &&
+            std::getline(ss, lastName, ';') &&
+            std::getline(ss, specialization, ';'))
+        {
+            try
+            {
+                Doctor doctor(
+                    std::stoi(idStr),
+                    firstName,
+                    lastName,
+                    specialization
+                );
+                doctors.push_back(doctor);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Error parsing doctor data: " << e.what() << "\n";
+            }
+        }
     }
 
+    file.close();
     return doctors;
 }
 
 /**
  * @brief Saves visits to a text file.
+ *
+ * @param visits Vector of visits.
+ * @param filename Output file name.
  */
 void FileService::saveVisits(
     const std::vector<Visit>& visits,
@@ -144,6 +197,11 @@ void FileService::saveVisits(
 )
 {
     std::ofstream file(filename);
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Could not open file " << filename << " for writing.\n";
+        return;
+    }
 
     for (const auto& visit : visits)
     {
@@ -162,19 +220,27 @@ void FileService::saveVisits(
 
 /**
  * @brief Loads visits from a text file.
+ *
+ * @param filename Input file name.
+ * @return std::vector<Visit> Loaded visits.
  */
 std::vector<Visit> FileService::loadVisits(
     const std::string& filename
 )
 {
     std::vector<Visit> visits;
-
     std::ifstream file(filename);
 
-    std::string line;
+    if (!file.is_open())
+    {
+        return visits;
+    }
 
+    std::string line;
     while (std::getline(file, line))
     {
+        if (line.empty()) continue;
+
         std::stringstream ss(line);
 
         std::string idStr;
@@ -182,21 +248,28 @@ std::vector<Visit> FileService::loadVisits(
         std::string doctorIdStr;
         std::string date;
 
-        std::getline(ss, idStr, ';');
-        std::getline(ss, patientIdStr, ';');
-        std::getline(ss, doctorIdStr, ';');
-        std::getline(ss, date, ';');
-
-        Visit visit
-        (
-            std::stoi(idStr),
-            std::stoi(patientIdStr),
-            std::stoi(doctorIdStr),
-            date
-        );
-
-        visits.push_back(visit);
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, patientIdStr, ';') &&
+            std::getline(ss, doctorIdStr, ';') &&
+            std::getline(ss, date, ';'))
+        {
+            try
+            {
+                Visit visit(
+                    std::stoi(idStr),
+                    std::stoi(patientIdStr),
+                    std::stoi(doctorIdStr),
+                    date
+                );
+                visits.push_back(visit);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Error parsing visit data: " << e.what() << "\n";
+            }
+        }
     }
 
+    file.close();
     return visits;
 }

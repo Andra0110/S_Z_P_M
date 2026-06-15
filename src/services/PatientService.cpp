@@ -20,19 +20,21 @@ void PatientService::displayPatients() const
     {
         std::cout << "ID: " 
                   << patient.getId()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "First name: "
                   << patient.getFirstName()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Last name: "
                   << patient.getLastName()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "PESEL: "
                   << patient.getPesel()
-                  << std::endl;
+                  << "\n";
+                  
+        std::cout << std::endl; // Pusta linia odstępu między pacjentami
     }
 }
 
@@ -65,12 +67,16 @@ Patient* PatientService::searchPatientById(int id)
  */
 bool PatientService::removePatient(int id)
 {
-    for (auto it = patients.begin(); it != patients.end(); ++it)
+    for (auto it = patients.begin(); it != patients.end(); )
     {
         if (it->getId() == id)
         {
-            patients.erase(it);
+            it = patients.erase(it); // Bezpieczne usunięcie elementu z wektora
             return true;
+        }
+        else
+        {
+            ++it;
         }
     }
 

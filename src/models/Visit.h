@@ -58,4 +58,12 @@ class Visit
      * @return std::string Appointment date.
      */
     std::string getDate() const;
+
+    /**
+     * @brief Sets a new appointment date.
+     *
+     * @param newDate The new date string to set for the visit.
+     */
+    void setDate(const std::string& newDate);    
+
 };

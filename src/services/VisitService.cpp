@@ -19,19 +19,19 @@ void VisitService::displayVisits() const
     {
         std::cout << "Visit ID: "
                   << visit.getId()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Patient ID: "
                   << visit.getPatientId()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Doctor ID: "
                   << visit.getDoctorId()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Date: "
                   << visit.getDate()
-                  << std::endl;
+                  << "\n";
     }
 }
 
@@ -55,12 +55,16 @@ Visit* VisitService::searchVisitById(int id)
  */
 bool VisitService::removeVisit(int id)
 {
-    for (auto it = visits.begin(); it != visits.end(); ++it)
+    for (auto it = visits.begin(); it != visits.end(); )
     {
         if (it->getId() == id)
         {
-            visits.erase(it);
+            it = visits.erase(it);
             return true;
+        }
+        else
+        {
+            ++it;
         }
     }
     return false;
@@ -140,17 +144,17 @@ void VisitService::displayVisitsByPatient(
         {
             std::cout << "Visit ID: "
                       << visit.getId()
-                      << std::endl;
+                      << "\n";
 
             std::cout << "Doctor ID: "
                       << visit.getDoctorId()
-                      << std::endl;
+                      << "\n";
 
             std::cout << "Date: "
                       << visit.getDate()
-                      << std::endl;
+                      << "\n";
 
-            std::cout << std::endl;
+            std::cout << "\n";
         }
     }
 }
@@ -168,17 +172,17 @@ void VisitService::displayVisitsByDoctor(
         {
             std::cout << "Visit ID: "
                       << visit.getId()
-                      << std::endl;
+                      << "\n";
 
             std::cout << "Patient ID: "
                       << visit.getPatientId()
-                      << std::endl;
+                      << "\n";
 
             std::cout << "Date: "
                       << visit.getDate()
-                      << std::endl;
+                      << "\n";
 
-            std::cout << std::endl;
+            std::cout << "\n";
         }
     }
 }

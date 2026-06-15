@@ -60,3 +60,33 @@ std::string Doctor::getSpecialization() const
 {
     return specialization;
 }
+
+/**
+ * @brief Sets a new first name for the doctor.
+ *
+ * @param firstName The new first name.
+ */
+void Doctor::setFirstName(const std::string& firstName)
+{
+    this->firstName = firstName;
+}
+
+/**
+ * @brief Sets a new last name for the doctor.
+ *
+ * @param lastName The new last name.
+ */
+void Doctor::setLastName(const std::string& lastName)
+{
+    this->lastName = lastName;
+}
+
+/**
+ * @brief Sets a new specialization for the doctor.
+ *
+ * @param specialization The new specialization.
+ */
+void Doctor::setSpecialization(const std::string& specialization)
+{
+    this->specialization = specialization;
+}

@@ -58,4 +58,25 @@ class Doctor
      * @return std::string Specialization.
      */
     std::string getSpecialization() const;
+
+    /**
+     * @brief Sets a new first name for the doctor.
+     *
+     * @param firstName The new first name.
+     */
+    void setFirstName(const std::string& firstName);
+
+    /**
+     * @brief Sets a new last name for the doctor.
+     *
+     * @param lastName The new last name.
+     */
+    void setLastName(const std::string& lastName);
+
+    /**
+     * @brief Sets a new specialization for the doctor.
+     *
+     * @param specialization The new specialization.
+     */
+    void setSpecialization(const std::string& specialization);
 };

@@ -3,6 +3,8 @@
 
 /**
  * @brief Adds a new doctor to the system.
+ *
+ * @param doctor Doctor object to add.
  */
 void DoctorService::addDoctor(const Doctor& doctor)
 {
@@ -10,7 +12,7 @@ void DoctorService::addDoctor(const Doctor& doctor)
 }
 
 /**
- * @brief Displays all doctors.
+ * @brief Displays all doctors stored in the system.
  */
 void DoctorService::displayDoctors() const
 {
@@ -18,25 +20,30 @@ void DoctorService::displayDoctors() const
     {
         std::cout << "ID: "
                   << doctor.getId()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "First Name: "
                   << doctor.getFirstName()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Last Name: "
                   << doctor.getLastName()
-                  << std::endl;
+                  << "\n";
 
         std::cout << "Specialization: "
                   << doctor.getSpecialization()
-                  << std::endl;
-        
+                  << "\n";
+                  
+        std::cout << std::endl; // Pusta linia odstępu między lekarzami
     }
 }
 
 /**
  * @brief Searches doctor by ID.
+ *
+ * @param id Doctor identifier.
+ * @return Doctor* Pointer to found doctor.
+ * @return nullptr If doctor was not found.
  */
 Doctor* DoctorService::searchDoctorById(int id)
 {
@@ -53,15 +60,23 @@ Doctor* DoctorService::searchDoctorById(int id)
 
 /**
  * @brief Removes doctor by ID.
+ *
+ * @param id Doctor identifier.
+ * @return true If doctor was removed.
+ * @return false If doctor was not found.
  */
 bool DoctorService::removeDoctor(int id)
 {
-    for (auto it = doctors.begin(); it != doctors.end(); ++it)
+    for (auto it = doctors.begin(); it != doctors.end(); )
     {
         if (it->getId() == id)
         {
-            doctors.erase(it);
+            it = doctors.erase(it); // Bezpieczne usunięcie elementu bez unieważniania iteratora
             return true;
+        }
+        else
+        {
+            ++it;
         }
     }
 
