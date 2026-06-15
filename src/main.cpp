@@ -21,7 +21,7 @@ int main()
     std::cout << "RUNNING AUTOMATED BACKEND TESTS...\n";
     std::cout << "===========================================\n";
 
-
+    // 2. Execute isolated patient module tests
     testPatients(patientService);
     std::cout << "[SUCCESS] Patient module tests passed.\n";
 
@@ -38,7 +38,8 @@ int main()
     std::cin.get(); // Wait for user acknowledgment before clearing screen/opening menu
 
     // 5. Inject dependencies into the UI layer and run the application
-    MenuUI ui(patientService);
+    // Przekazujemy oba serwisy: patientService oraz doctorService
+    MenuUI ui(patientService, doctorService);
     ui.run();
 
     return 0;
