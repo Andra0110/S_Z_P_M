@@ -1,14 +1,18 @@
 #include "tests/PatientTests.h"
 #include "tests/DoctorTests.h"
 #include "tests/VisitTests.h"
-#include "src/ui/MenuUI.h"
-#include "src/services/PatientService.h"
-#include "src/services/DoctorService.h"
-#include "src/services/VisitService.h"
+#include "ui/MenuUI.h"
+#include "services/PatientService.h"
+#include "services/DoctorService.h"
+#include "services/VisitService.h"
 #include <iostream>
 
 /**
  * @brief Main execution function.
+ *
+ * Runs automated backend tests to ensure system integrity, then initializes
+ * the object-oriented MenuUI suite to launch the interactive clinic console.
+ *
  * @return int Execution status (0 for success).
  */
 int main() 
@@ -34,6 +38,7 @@ int main()
     std::cout << "Press Enter to launch the interactive menu...";
     std::cin.get(); 
 
+    // POPRAWKA: Tworzymy instancję klasy przekazując serwisy do konstruktora, a potem odpalamy run()
     MenuUI ui(patientService, doctorService, visitService);
     ui.run();
 

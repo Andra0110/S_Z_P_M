@@ -2,9 +2,18 @@
 #include <iostream>
 #include <limits>
 
+/**
+ * @brief Constructs the MenuUI implementation and binds core services.
+ * * @param pService Reference to the active PatientService.
+ * @param dService Reference to the active DoctorService.
+ * @param vService Reference to the active VisitService.
+ */
 MenuUI::MenuUI(PatientService& pService, DoctorService& dService, VisitService& vService) 
     : patientService(pService), doctorService(dService), visitService(vService) {}
 
+/**
+ * @brief Starts the primary infinite loop for the application's main menu.
+ */
 void MenuUI::run() {
     int choice = 0;
     while (true) {
@@ -36,6 +45,10 @@ void MenuUI::run() {
         }
     }
 }
+
+// =========================================================================
+// === PATIENT SUBMENU IMPLEMENTATION ===
+// =========================================================================
 
 void MenuUI::handlePatientMenu() {
     int choice = 0;
@@ -75,7 +88,10 @@ void MenuUI::addNewPatient() {
     std::cout << "\n[ADD NEW PATIENT]\n";
     int id;
     std::cout << "Enter Patient ID (number): ";
-    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { 
+        std::cout << "Error: Must be a number: "; 
+        clearInputBuffer(); 
+    }
     std::cin.ignore();
 
     if (patientService.searchPatientById(id) != nullptr) {
@@ -83,9 +99,9 @@ void MenuUI::addNewPatient() {
         return;
     }
 
-    std::string firstName = getValidatedInput("Enter first name: ", Validator::validateName);
-    std::string lastName = getValidatedInput("Enter last name: ", Validator::validateName);
-    std::string pesel = getValidatedInput("Enter PESEL (11 digits): ", Validator::validatePesel);
+    std::string firstName = getValidatedInput("Enter first name: ", Validator::isValidName);
+    std::string lastName = getValidatedInput("Enter last name: ", Validator::isValidName);
+    std::string pesel = getValidatedInput("Enter PESEL (11 digits): ", Validator::isValidPesel);
 
     Patient newPatient(id, firstName, lastName, pesel);
     patientService.addPatient(newPatient);
@@ -101,7 +117,10 @@ void MenuUI::searchPatient() const {
     std::cout << "\n[SEARCH PATIENT]\n";
     int id;
     std::cout << "Enter Patient ID: ";
-    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { 
+        std::cout << "Error: Must be a number: "; 
+        clearInputBuffer(); 
+    }
     std::cin.ignore();
 
     Patient* patient = patientService.searchPatientById(id);
@@ -116,7 +135,10 @@ void MenuUI::updatePatient() {
     std::cout << "\n[EDIT PATIENT DATA]\n";
     int id;
     std::cout << "Enter Patient ID to edit: ";
-    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { 
+        std::cout << "Error: Must be a number: "; 
+        clearInputBuffer(); 
+    }
     std::cin.ignore();
 
     Patient* patient = patientService.searchPatientById(id);
@@ -124,8 +146,8 @@ void MenuUI::updatePatient() {
         std::cout << "Error: Patient does not exist.\n";
         return;
     }
-    std::string newFirstName = getValidatedInput("Enter new first name: ", Validator::validateName);
-    std::string newLastName = getValidatedInput("Enter new last name: ", Validator::validateName);
+    std::string newFirstName = getValidatedInput("Enter new first name: ", Validator::isValidName);
+    std::string newLastName = getValidatedInput("Enter new last name: ", Validator::isValidName);
     patient->setFirstName(newFirstName);
     patient->setLastName(newLastName);
     std::cout << "Success: Patient data updated.\n";
@@ -135,7 +157,10 @@ void MenuUI::deletePatient() {
     std::cout << "\n[DELETE PATIENT]\n";
     int id;
     std::cout << "Enter Patient ID to delete: ";
-    while (!(std::cin >> id)) { std::cout << "Error: Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { 
+        std::cout << "Error: Must be a number: "; 
+        clearInputBuffer(); 
+    }
     std::cin.ignore();
 
     if (patientService.removePatient(id)) {
@@ -144,6 +169,10 @@ void MenuUI::deletePatient() {
         std::cout << "Error: Patient not found.\n";
     }
 }
+
+// =========================================================================
+// === DOCTOR SUBMENU IMPLEMENTATION ===
+// =========================================================================
 
 void MenuUI::handleDoctorMenu() {
     int choice = 0;
@@ -190,10 +219,11 @@ void MenuUI::addNewDoctor() {
         return;
     }
 
-    std::string firstName = getValidatedInput("Enter first name: ", Validator::validateName);
-    std::string lastName = getValidatedInput("Enter last name: ", Validator::validateName);
+    std::string firstName = getValidatedInput("Enter first name: ", Validator::isValidName);
+    std::string lastName = getValidatedInput("Enter last name: ", Validator::isValidName);
+    std::string specialization = getValidatedInput("Enter specialization: ", Validator::isValidSpecialization);
     
-    Doctor newDoctor(id, firstName, lastName);
+    Doctor newDoctor(id, firstName, lastName, specialization);
     doctorService.addDoctor(newDoctor);
     std::cout << "Success: Doctor has been successfully added.\n";
 }
@@ -215,11 +245,16 @@ void MenuUI::searchDoctor() const {
 
     Doctor* doctor = doctorService.searchDoctorById(id);
     if (doctor != nullptr) {
-        std::cout << "Doctor found with ID: " << id << "\n";
+        std::cout << "Doctor found:\n- Name: " << doctor->getFirstName() << " " << doctor->getLastName() 
+                  << "\n- Specialization: " << doctor->getSpecialization() << "\n";
     } else {
         std::cout << "Info: No doctor found with this ID.\n";
     }
 }
+
+// =========================================================================
+// === VISIT SUBMENU IMPLEMENTATION ===
+// =========================================================================
 
 void MenuUI::handleVisitMenu() {
     int choice = 0;
@@ -267,7 +302,7 @@ void MenuUI::addNewVisit() {
     while (!(std::cin >> doctorId)) { std::cout << "Must be a number: "; clearInputBuffer(); }
     std::cin.ignore();
 
-    std::string date = getValidatedInput("Enter Date (YYYY-MM-DD): ", Validator::validateName);
+    std::string date = getValidatedInput("Enter Date (YYYY-MM-DD HH:MM): ", Validator::isValidDate);
 
     if (!visitService.canCreateVisit(patientId, doctorId, patientService, doctorService)) {
         std::cout << "Error: Provided Patient ID or Doctor ID does not exist in the system!\n";
@@ -275,7 +310,7 @@ void MenuUI::addNewVisit() {
     }
 
     if (!visitService.isDoctorAvailable(doctorId, date)) {
-        std::cout << "Error: The doctor is already booked on this date!\n";
+        std::cout << "Error: The doctor is already booked on this date and time!\n";
         return;
     }
 
@@ -299,6 +334,9 @@ void MenuUI::searchVisit() const {
     Visit* visit = visitService.searchVisitById(id);
     if (visit != nullptr) {
         std::cout << "Success: Visit found with ID: " << id << "\n";
+        std::cout << "- Patient ID: " << visit->getPatientId() << "\n";
+        std::cout << "- Doctor ID: " << visit->getDoctorId() << "\n";
+        std::cout << "- Date & Time: " << visit->getDate() << "\n";
     } else {
         std::cout << "Info: No visit found with this ID.\n";
     }
@@ -317,6 +355,10 @@ void MenuUI::cancelVisit() {
         std::cout << "Error: Visit not found.\n";
     }
 }
+
+// =========================================================================
+// === UTILITIES IMPLEMENTATION ===
+// =========================================================================
 
 void MenuUI::clearInputBuffer() const {
     std::cin.clear();
