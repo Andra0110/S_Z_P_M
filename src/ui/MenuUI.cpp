@@ -2,9 +2,25 @@
 #include <iostream>
 #include <limits>
 
+// Prywatne kody kolorów ANSI ułatwiające zarządzanie UX
+namespace {
+    const std::string RESET   = "\033[0m";
+    const std::string RED     = "\033[31m";
+    const std::string GREEN   = "\033[32m";
+    const std::string YELLOW  = "\033[33m";
+    const std::string CYAN    = "\033[36m";
+    const std::string BOLD    = "\033[1m";
+
+    void pressEnterToContinue() {
+        std::cout << "\n" << CYAN << "Press Enter to continue..." << RESET;
+        std::cin.clear();
+        std::cin.get();
+    }
+}
+
 /**
  * @brief Constructs the MenuUI implementation and binds core services.
- * * @param pService Reference to the active PatientService.
+ * @param pService Reference to the active PatientService.
  * @param dService Reference to the active DoctorService.
  * @param vService Reference to the active VisitService.
  */
@@ -17,16 +33,19 @@ MenuUI::MenuUI(PatientService& pService, DoctorService& dService, VisitService& 
 void MenuUI::run() {
     int choice = 0;
     while (true) {
-        std::cout << "\n=== CLINIC MANAGEMENT SYSTEM ===\n";
+        std::cout << "\n" << CYAN << "===========================================\n" << RESET;
+        std::cout << BOLD << "        CLINIC MANAGEMENT SYSTEM          \n" << RESET;
+        std::cout << CYAN << "===========================================\n" << RESET;
         std::cout << "1. Patient Management\n";
         std::cout << "2. Doctor Management\n";
         std::cout << "3. Visit Management\n";
-        std::cout << "0. Exit\n";
-        std::cout << "Enter your choice: ";
+        std::cout << RED << "0. Exit\n" << RESET;
+        std::cout << "\nEnter your choice: ";
 
         if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
+            std::cout << RED << "Error: Invalid input. Please enter a number.\n" << RESET;
             clearInputBuffer();
+            pressEnterToContinue();
             continue;
         }
         std::cin.ignore();
@@ -38,10 +57,11 @@ void MenuUI::run() {
         } else if (choice == 3) {
             handleVisitMenu();
         } else if (choice == 0) {
-            std::cout << "Exiting system. Goodbye!\n";
+            std::cout << GREEN << "\nExiting system. Goodbye!\n\n" << RESET;
             break;
         } else {
-            std::cout << "Invalid choice. Please try again.\n";
+            std::cout << RED << "Invalid choice. Please try again.\n" << RESET;
+            pressEnterToContinue();
         }
     }
 }
@@ -53,49 +73,53 @@ void MenuUI::run() {
 void MenuUI::handlePatientMenu() {
     int choice = 0;
     while (true) {
+        std::cout << "\n" << CYAN << "-------------------------------------------\n" << RESET;
         displayPatientMenu();
         if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
+            std::cout << RED << "Error: Invalid input. Please enter a number.\n" << RESET;
             clearInputBuffer();
+            pressEnterToContinue();
             continue;
         }
         std::cin.ignore();
 
         switch (choice) {
-            case 1: addNewPatient(); break;
-            case 2: displayAllPatients(); break;
-            case 3: searchPatient(); break;
-            case 4: updatePatient(); break;
-            case 5: deletePatient(); break;
+            case 1: addNewPatient(); pressEnterToContinue(); break;
+            case 2: displayAllPatients(); pressEnterToContinue(); break;
+            case 3: searchPatient(); pressEnterToContinue(); break;
+            case 4: updatePatient(); pressEnterToContinue(); break;
+            case 5: deletePatient(); pressEnterToContinue(); break;
             case 0: return;
-            default: std::cout << "Invalid choice. Please try again.\n";
+            default: 
+                std::cout << RED << "Invalid choice. Please try again.\n" << RESET;
+                pressEnterToContinue();
         }
     }
 }
 
 void MenuUI::displayPatientMenu() const {
-    std::cout << "\n--- PATIENT MANAGEMENT ---\n";
+    std::cout << CYAN << "--- PATIENT MANAGEMENT ---\n" << RESET;
     std::cout << "1. Add New Patient\n";
     std::cout << "2. Display All Patients\n";
     std::cout << "3. Search Patient (by ID)\n";
     std::cout << "4. Edit Patient Data\n";
     std::cout << "5. Delete Patient\n";
-    std::cout << "0. Return to Main Menu\n";
-    std::cout << "Enter your choice: ";
+    std::cout << RED << "0. Return to Main Menu\n" << RESET;
+    std::cout << "\nEnter your choice: ";
 }
 
 void MenuUI::addNewPatient() {
-    std::cout << "\n[ADD NEW PATIENT]\n";
+    std::cout << CYAN << "\n[ADD NEW PATIENT]\n" << RESET;
     int id;
     std::cout << "Enter Patient ID (number): ";
     while (!(std::cin >> id)) { 
-        std::cout << "Error: Must be a number: "; 
+        std::cout << RED << "Error: Must be a number: " << RESET; 
         clearInputBuffer(); 
     }
     std::cin.ignore();
 
     if (patientService.searchPatientById(id) != nullptr) {
-        std::cout << "Error: A patient with this ID already exists.\n";
+        std::cout << RED << "Error: A patient with this ID already exists.\n" << RESET;
         return;
     }
 
@@ -105,68 +129,70 @@ void MenuUI::addNewPatient() {
 
     Patient newPatient(id, firstName, lastName, pesel);
     patientService.addPatient(newPatient);
-    std::cout << "Success: Patient has been successfully added.\n";
+    std::cout << GREEN << "\nSuccess: Patient has been successfully added.\n" << RESET;
 }
 
 void MenuUI::displayAllPatients() const {
-    std::cout << "\n[PATIENT LIST]\n";
+    std::cout << CYAN << "\n[PATIENT LIST]\n" << RESET;
     patientService.displayPatients(); 
 }
 
 void MenuUI::searchPatient() const {
-    std::cout << "\n[SEARCH PATIENT]\n";
+    std::cout << CYAN << "\n[SEARCH PATIENT]\n" << RESET;
     int id;
     std::cout << "Enter Patient ID: ";
     while (!(std::cin >> id)) { 
-        std::cout << "Error: Must be a number: "; 
+        std::cout << RED << "Error: Must be a number: " << RESET; 
         clearInputBuffer(); 
     }
     std::cin.ignore();
 
     Patient* patient = patientService.searchPatientById(id);
     if (patient != nullptr) {
-        std::cout << "Patient found:\n- Name: " << patient->getFirstName() << " " << patient->getLastName() << "\n";
+        std::cout << GREEN << "\nPatient found:\n" << RESET 
+                  << "- Name: " << patient->getFirstName() << " " << patient->getLastName() << "\n"
+                  << "- PESEL: " << patient->getPesel() << "\n";
     } else {
-        std::cout << "Info: No patient found with this ID.\n";
+        std::cout << YELLOW << "\nInfo: No patient found with this ID.\n" << RESET;
     }
 }
 
 void MenuUI::updatePatient() {
-    std::cout << "\n[EDIT PATIENT DATA]\n";
+    std::cout << CYAN << "\n[EDIT PATIENT DATA]\n" << RESET;
     int id;
     std::cout << "Enter Patient ID to edit: ";
     while (!(std::cin >> id)) { 
-        std::cout << "Error: Must be a number: "; 
+        std::cout << RED << "Error: Must be a number: " << RESET; 
         clearInputBuffer(); 
     }
     std::cin.ignore();
 
     Patient* patient = patientService.searchPatientById(id);
     if (patient == nullptr) {
-        std::cout << "Error: Patient does not exist.\n";
+        std::cout << RED << "Error: Patient does not exist.\n" << RESET;
         return;
     }
     std::string newFirstName = getValidatedInput("Enter new first name: ", Validator::isValidName);
     std::string newLastName = getValidatedInput("Enter new last name: ", Validator::isValidName);
     patient->setFirstName(newFirstName);
     patient->setLastName(newLastName);
-    std::cout << "Success: Patient data updated.\n";
+    std::cout << GREEN << "\nSuccess: Patient data updated.\n" << RESET;
 }
 
 void MenuUI::deletePatient() {
-    std::cout << "\n[DELETE PATIENT]\n";
+    std::cout << CYAN << "\n[DELETE PATIENT]\n" << RESET;
     int id;
     std::cout << "Enter Patient ID to delete: ";
     while (!(std::cin >> id)) { 
-        std::cout << "Error: Must be a number: "; 
+        std::cout << RED << "Error: Must be a number: " << RESET; 
         clearInputBuffer(); 
     }
     std::cin.ignore();
 
     if (patientService.removePatient(id)) {
-        std::cout << "Success: Patient removed.\n";
+        std::cout << GREEN << "\nSuccess: Patient removed.\n" << RESET;
     } else {
-        std::cout << "Error: Patient not found.\n";
+        std::cout << RED << "Error: Patient not found.\n" << RESET;
     }
 }
 
@@ -177,45 +203,49 @@ void MenuUI::deletePatient() {
 void MenuUI::handleDoctorMenu() {
     int choice = 0;
     while (true) {
+        std::cout << "\n" << CYAN << "-------------------------------------------\n" << RESET;
         displayDoctorMenu();
         if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
+            std::cout << RED << "Error: Invalid input. Please enter a number.\n" << RESET;
             clearInputBuffer();
+            pressEnterToContinue();
             continue;
         }
         std::cin.ignore();
 
         switch (choice) {
-            case 1: addNewDoctor(); break;
-            case 2: displayAllDoctors(); break;
-            case 3: searchDoctor(); break;
+            case 1: addNewDoctor(); pressEnterToContinue(); break;
+            case 2: displayAllDoctors(); pressEnterToContinue(); break;
+            case 3: searchDoctor(); pressEnterToContinue(); break;
             case 0: return;
-            default: std::cout << "Invalid choice. Please try again.\n";
+            default: 
+                std::cout << RED << "Invalid choice. Please try again.\n" << RESET;
+                pressEnterToContinue();
         }
     }
 }
 
 void MenuUI::displayDoctorMenu() const {
-    std::cout << "\n--- DOCTOR MANAGEMENT ---\n";
+    std::cout << CYAN << "--- DOCTOR MANAGEMENT ---\n" << RESET;
     std::cout << "1. Add New Doctor\n";
     std::cout << "2. Display All Doctors\n";
     std::cout << "3. Search Doctor (by ID)\n";
-    std::cout << "0. Return to Main Menu\n";
-    std::cout << "Enter your choice: ";
+    std::cout << RED << "0. Return to Main Menu\n" << RESET;
+    std::cout << "\nEnter your choice: ";
 }
 
 void MenuUI::addNewDoctor() {
-    std::cout << "\n[ADD NEW DOCTOR]\n";
+    std::cout << CYAN << "\n[ADD NEW DOCTOR]\n" << RESET;
     int id;
     std::cout << "Enter Doctor ID (number): ";
     while (!(std::cin >> id)) {
-        std::cout << "Error: ID must be a number! Try again: ";
+        std::cout << RED << "Error: ID must be a number! Try again: " << RESET;
         clearInputBuffer();
     }
     std::cin.ignore();
 
     if (doctorService.searchDoctorById(id) != nullptr) {
-        std::cout << "Error: A doctor with this ID already exists.\n";
+        std::cout << RED << "Error: A doctor with this ID already exists.\n" << RESET;
         return;
     }
 
@@ -225,30 +255,31 @@ void MenuUI::addNewDoctor() {
     
     Doctor newDoctor(id, firstName, lastName, specialization);
     doctorService.addDoctor(newDoctor);
-    std::cout << "Success: Doctor has been successfully added.\n";
+    std::cout << GREEN << "\nSuccess: Doctor has been successfully added.\n" << RESET;
 }
 
 void MenuUI::displayAllDoctors() const {
-    std::cout << "\n[DOCTOR LIST]\n";
+    std::cout << CYAN << "\n[DOCTOR LIST]\n" << RESET;
     doctorService.displayDoctors(); 
 }
 
 void MenuUI::searchDoctor() const {
-    std::cout << "\n[SEARCH DOCTOR]\n";
+    std::cout << CYAN << "\n[SEARCH DOCTOR]\n" << RESET;
     int id;
     std::cout << "Enter Doctor ID: ";
     while (!(std::cin >> id)) {
-        std::cout << "Error: ID must be a number! Try again: ";
+        std::cout << RED << "Error: ID must be a number! Try again: " << RESET;
         clearInputBuffer();
     }
     std::cin.ignore();
 
     Doctor* doctor = doctorService.searchDoctorById(id);
     if (doctor != nullptr) {
-        std::cout << "Doctor found:\n- Name: " << doctor->getFirstName() << " " << doctor->getLastName() 
-                  << "\n- Specialization: " << doctor->getSpecialization() << "\n";
+        std::cout << GREEN << "\nDoctor found:\n" << RESET
+                  << "- Name: " << doctor->getFirstName() << " " << doctor->getLastName() << "\n"
+                  << "- Specialization: " << doctor->getSpecialization() << "\n";
     } else {
-        std::cout << "Info: No doctor found with this ID.\n";
+        std::cout << YELLOW << "\nInfo: No doctor found with this ID.\n" << RESET;
     }
 }
 
@@ -259,100 +290,104 @@ void MenuUI::searchDoctor() const {
 void MenuUI::handleVisitMenu() {
     int choice = 0;
     while (true) {
+        std::cout << "\n" << CYAN << "-------------------------------------------\n" << RESET;
         displayVisitMenu();
         if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
+            std::cout << RED << "Error: Invalid input. Please enter a number.\n" << RESET;
             clearInputBuffer();
+            pressEnterToContinue();
             continue;
         }
         std::cin.ignore();
 
         switch (choice) {
-            case 1: addNewVisit(); break;
-            case 2: displayAllVisits(); break;
-            case 3: searchVisit(); break;
-            case 4: cancelVisit(); break;
+            case 1: addNewVisit(); pressEnterToContinue(); break;
+            case 2: displayAllVisits(); pressEnterToContinue(); break;
+            case 3: searchVisit(); pressEnterToContinue(); break;
+            case 4: cancelVisit(); pressEnterToContinue(); break;
             case 0: return;
-            default: std::cout << "Invalid choice. Please try again.\n";
+            default: 
+                std::cout << RED << "Invalid choice. Please try again.\n" << RESET;
+                pressEnterToContinue();
         }
     }
 }
 
 void MenuUI::displayVisitMenu() const {
-    std::cout << "\n--- VISIT MANAGEMENT ---\n";
+    std::cout << CYAN << "--- VISIT MANAGEMENT ---\n" << RESET;
     std::cout << "1. Book New Visit\n";
     std::cout << "2. Display All Visits\n";
     std::cout << "3. Search Visit (by ID)\n";
     std::cout << "4. Cancel/Remove Visit\n";
-    std::cout << "0. Return to Main Menu\n";
-    std::cout << "Enter your choice: ";
+    std::cout << RED << "0. Return to Main Menu\n" << RESET;
+    std::cout << "\nEnter your choice: ";
 }
 
 void MenuUI::addNewVisit() {
-    std::cout << "\n[BOOK NEW VISIT]\n";
+    std::cout << CYAN << "\n[BOOK NEW VISIT]\n" << RESET;
     
     int id, patientId, doctorId;
     std::cout << "Enter custom Visit ID (number): ";
-    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { std::cout << RED << "Must be a number: " << RESET; clearInputBuffer(); }
     
     std::cout << "Enter Patient ID (number): ";
-    while (!(std::cin >> patientId)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> patientId)) { std::cout << RED << "Must be a number: " << RESET; clearInputBuffer(); }
     
     std::cout << "Enter Doctor ID (number): ";
-    while (!(std::cin >> doctorId)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> doctorId)) { std::cout << RED << "Must be a number: " << RESET; clearInputBuffer(); }
     std::cin.ignore();
 
     std::string date = getValidatedInput("Enter Date (YYYY-MM-DD HH:MM): ", Validator::isValidDate);
 
     if (!visitService.canCreateVisit(patientId, doctorId, patientService, doctorService)) {
-        std::cout << "Error: Provided Patient ID or Doctor ID does not exist in the system!\n";
+        std::cout << RED << "\nError: Provided Patient ID or Doctor ID does not exist in the system!\n" << RESET;
         return;
     }
 
     if (!visitService.isDoctorAvailable(doctorId, date)) {
-        std::cout << "Error: The doctor is already booked on this date and time!\n";
+        std::cout << RED << "\nError: The doctor is already booked on this date and time!\n" << RESET;
         return;
     }
 
     Visit newVisit(id, patientId, doctorId, date);
     visitService.addVisit(newVisit);
-    std::cout << "Success: Visit booked successfully.\n";
+    std::cout << GREEN << "\nSuccess: Visit booked successfully.\n" << RESET;
 }
 
 void MenuUI::displayAllVisits() const {
-    std::cout << "\n[ALL BOOKED VISITS]\n";
+    std::cout << CYAN << "\n[ALL BOOKED VISITS]\n" << RESET;
     visitService.displayVisits(); 
 }
 
 void MenuUI::searchVisit() const {
-    std::cout << "\n[SEARCH VISIT]\n";
+    std::cout << CYAN << "\n[SEARCH VISIT]\n" << RESET;
     int id;
     std::cout << "Enter Visit ID: ";
-    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { std::cout << RED << "Must be a number: " << RESET; clearInputBuffer(); }
     std::cin.ignore();
 
     Visit* visit = visitService.searchVisitById(id);
     if (visit != nullptr) {
-        std::cout << "Success: Visit found with ID: " << id << "\n";
+        std::cout << GREEN << "\nSuccess: Visit found with ID: " << id << "\n" << RESET;
         std::cout << "- Patient ID: " << visit->getPatientId() << "\n";
         std::cout << "- Doctor ID: " << visit->getDoctorId() << "\n";
         std::cout << "- Date & Time: " << visit->getDate() << "\n";
     } else {
-        std::cout << "Info: No visit found with this ID.\n";
+        std::cout << YELLOW << "\nInfo: No visit found with this ID.\n" << RESET;
     }
 }
 
 void MenuUI::cancelVisit() {
-    std::cout << "\n[CANCEL VISIT]\n";
+    std::cout << CYAN << "\n[CANCEL VISIT]\n" << RESET;
     int id;
     std::cout << "Enter Visit ID to cancel: ";
-    while (!(std::cin >> id)) { std::cout << "Must be a number: "; clearInputBuffer(); }
+    while (!(std::cin >> id)) { std::cout << RED << "Must be a number: " << RESET; clearInputBuffer(); }
     std::cin.ignore();
 
     if (visitService.removeVisit(id)) {
-        std::cout << "Success: Visit has been cancelled.\n";
+        std::cout << GREEN << "\nSuccess: Visit has been cancelled.\n" << RESET;
     } else {
-        std::cout << "Error: Visit not found.\n";
+        std::cout << RED << "Error: Visit not found.\n" << RESET;
     }
 }
 
@@ -371,6 +406,6 @@ std::string MenuUI::getValidatedInput(const std::string& prompt, bool (*validati
         std::cout << prompt;
         std::getline(std::cin, input);
         if (validationFunc(input)) return input;
-        std::cout << "Error: Invalid data format! Please try again.\n";
+        std::cout << RED << "Error: Invalid data format! Please try again.\n" << RESET;
     }
 }

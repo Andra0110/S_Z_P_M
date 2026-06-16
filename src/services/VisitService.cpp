@@ -184,3 +184,10 @@ void VisitService::displayVisitsByDoctor(int doctorId) const
                       << " | Patient ID: " << visit.getPatientId()
                       << " | Date: " << visit.getDate() << "\n";
             hasVisits = true;
+        }
+    }
+    if (!hasVisits)
+    {
+        std::cout << "No scheduled appointments found for this doctor.\n";
+    }
+}
