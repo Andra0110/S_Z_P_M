@@ -12,12 +12,12 @@ void VisitService::addVisit(const Visit& visit)
     if (isDoctorAvailable(visit.getDoctorId(), visit.getDate()))
     {
         visits.push_back(visit);
-        std::cout << "[Sukces] Wizyta o ID " << visit.getId() << " zostala dodana.\n";
+        std::cout << "[Success] Visit with ID " << visit.getId() << " has been successfully added.\n";
     }
     else
     {
-        std::cout << "[Blad] Lekarz o ID " << visit.getDoctorId() 
-                  << " ma juz zajety termin: " << visit.getDate() << "\n";
+        std::cout << "[Error] Cannot schedule visit. Doctor with ID " << visit.getDoctorId() 
+                  << " is already booked for: " << visit.getDate() << "\n";
     }
 }
 
@@ -28,17 +28,17 @@ void VisitService::displayVisits() const
 {
     if (visits.empty())
     {
-        std::cout << "Terminarz jest pusty. Brak zaplanowanych wizyt.\n";
+        std::cout << "The appointment schedule is empty. No visits scheduled.\n";
         return;
     }
 
-    std::cout << "\n=== GLOWNY TERMINARZ WIZYT ===\n";
+    std::cout << "\n=== MAIN APPOINTMENT SCHEDULE ===\n";
     for (const auto& visit : visits)
     {
-        std::cout << "Wizyta ID: " << visit.getId()
-                  << " | Pacjent ID: " << visit.getPatientId()
-                  << " | Lekarz ID: " << visit.getDoctorId()
-                  << " | Data: " << visit.getDate() << "\n";
+        std::cout << "Visit ID: " << visit.getId()
+                  << " | Patient ID: " << visit.getPatientId()
+                  << " | Doctor ID: " << visit.getDoctorId()
+                  << " | Date: " << visit.getDate() << "\n";
     }
 }
 
@@ -74,11 +74,11 @@ bool VisitService::removeVisit(int id)
         if (it->getId() == id)
         {
             visits.erase(it);
-            std::cout << "[Sukces] Wizyta o ID " << id << " zostala anulowana.\n";
+            std::cout << "[Success] Visit with ID " << id << " has been cancelled.\n";
             return true;
         }
     }
-    std::cout << "[Blad] Nie znaleziono wizyty o ID " << id << ".\n";
+    std::cout << "[Error] Visit with ID " << id << " could not be found.\n";
     return false;
 }
 
@@ -131,12 +131,12 @@ bool VisitService::canCreateVisit(
 {
     if (patientService.searchPatientById(patientId) == nullptr)
     {
-        std::cout << "[Blad] Pacjent o ID " << patientId << " nie istnieje.\n";
+        std::cout << "[Validation Error] Patient with ID " << patientId << " does not exist.\n";
         return false;
     }
     if (doctorService.searchDoctorById(doctorId) == nullptr)
     {
-        std::cout << "[Blad] Lekarz o ID " << doctorId << " nie istnieje.\n";
+        std::cout << "[Validation Error] Doctor with ID " << doctorId << " does not exist.\n";
         return false;
     }
     return true;
@@ -149,21 +149,21 @@ bool VisitService::canCreateVisit(
  */
 void VisitService::displayVisitsByPatient(int patientId) const
 {
-    std::cout << "\n--- Wizyty pacjenta o ID: " << patientId << " ---\n";
+    std::cout << "\n--- Appointments for Patient ID: " << patientId << " ---\n";
     bool hasVisits = false;
     for (const auto& visit : visits)
     {
         if (visit.getPatientId() == patientId)
         {
-            std::cout << "Wizyta ID: " << visit.getId()
-                      << " | Lekarz ID: " << visit.getDoctorId()
-                      << " | Data: " << visit.getDate() << "\n";
+            std::cout << "Visit ID: " << visit.getId()
+                      << " | Doctor ID: " << visit.getDoctorId()
+                      << " | Date: " << visit.getDate() << "\n";
             hasVisits = true;
         }
     }
     if (!hasVisits)
     {
-        std::cout << "Brak zaplanowanych wizyt dla tego pacjenta.\n";
+        std::cout << "No scheduled appointments found for this patient.\n";
     }
 }
 
@@ -174,20 +174,13 @@ void VisitService::displayVisitsByPatient(int patientId) const
  */
 void VisitService::displayVisitsByDoctor(int doctorId) const
 {
-    std::cout << "\n--- Harmonogram lekarza o ID: " << doctorId << " ---\n";
+    std::cout << "\n--- Work Schedule for Doctor ID: " << doctorId << " ---\n";
     bool hasVisits = false;
     for (const auto& visit : visits)
     {
         if (visit.getDoctorId() == doctorId)
         {
-            std::cout << "Wizyta ID: " << visit.getId()
-                      << " | Pacjent ID: " << visit.getPatientId()
-                      << " | Data: " << visit.getDate() << "\n";
+            std::cout << "Visit ID: " << visit.getId()
+                      << " | Patient ID: " << visit.getPatientId()
+                      << " | Date: " << visit.getDate() << "\n";
             hasVisits = true;
-        }
-    }
-    if (!hasVisits)
-    {
-        std::cout << "Lekarz nie ma zaplanowanych wizyt.\n";
-    }
-}
