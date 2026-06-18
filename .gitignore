@@ -1,5 +1,17 @@
+# Foldery
 build/
+.vscode/
+.vs/
+
+# Pliki wykonywalne i binarki
 *.exe
 *.o
-.vscode/
+program
+bezpieczny_test
+
+# Pliki tymczasowe systemu
+.DS_Store
+Thumbs.db
+
+# Pliki testowe
 test-code*.cpp
