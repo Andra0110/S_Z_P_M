@@ -1,4 +1,4 @@
-# Dokumentacja Techniczna Systemu Medycznego S_Z_P_M
+# Dokumentacja Techniczna Systemu Medycznego S_Z_P_M (#51)
 
 Niniejszy dokument opisuje architekturę, strukturę modułową oraz mechanizmy kontroli danych konsolowej aplikacji medycznej S_Z_P_M (C++).
 
@@ -17,5 +17,6 @@ Aplikacja została zaimplementowana w architekturze warstwowej z pełną separac
 ## 2. Szczegółowy Opis Implementacji Warstwy Interfejsu (`MenuUI`)
 
 Klasa `MenuUI` jest agregatorem usług biznesowych i wstrzykuje referencje do serwisów poprzez konstruktor:
+
 ```cpp
 MenuUI(PatientService& pService, DoctorService& dService, VisitService& vService);
