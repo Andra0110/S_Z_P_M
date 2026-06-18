@@ -1,41 +1,38 @@
-# System Zarządzania Placówką Medyczną (S_Z_P_M)
+# S_Z_P_M
+System zarządzania przychodnią medyczną. Projekt aplikacji konsolowej w języku C++.
 
-Projekt realizuje konsolową aplikację do zarządzania placówką medyczną (przychodnią). Umożliwia rejestrację pacjentów, zarządzanie bazą lekarzy oraz kompleksową rezerwację wizyt medycznych z automatycznym sprawdzaniem dostępności terminów.
+## Opis projektu
+Aplikacja została zaprojektowana w celu usprawnienia pracy w przychodni poprzez cyfryzację bazy danych pacjentów, lekarzy oraz terminarza wizyt. System wspiera relacje między lekarzami a pacjentami oraz dba o unikanie konfliktów terminów.
 
-## 🚀 Główne Funkcjonalności
+## Architektura systemu
+Projekt opiera się na architekturze modułowej, co zapewnia łatwe utrzymanie kodu:
+* **Models**: Definicje obiektów (Pacjent, Lekarz, Wizyta).
+* **Services**: Logika biznesowa odpowiadająca za walidację i zarządzanie danymi.
+* **UI**: Interfejs konsolowy odpowiadający za komunikację z użytkownikiem.
+* **Persistence**: Moduł odpowiedzialny za trwały zapis danych do plików CSV/TXT.
 
-### 👥 Moduł Pacjentów
-* Dodawanie pacjentów z unikalnym identyfikatorem ID.
-* Pełna walidacja poprawności danych (imię, nazwisko, 11-cyfrowy PESEL).
-* Wyszukiwanie, edycja oraz usuwanie kartotek pacjentów po ich ID.
+## Instrukcja użytkowania
+1. Uruchom program korzystając z dołączonego skryptu kompilacji.
+2. Nawiguj po menu głównym, wpisując odpowiednie cyfry.
+3. Wymagany format daty wizyty: `YYYY-MM-DD HH:MM` (np. 2026-06-20 10:00).
+4. System automatycznie sprawdza istnienie pacjenta i lekarza przed utworzeniem wizyty.
 
-### 🩺 Moduł Lekarzy
-* Rejestracja lekarzy w systemie.
-* Wyświetlanie pełnej listy personelu medycznego oraz wyszukiwanie po ID.
+## Instrukcja kompilacji
 
-### 📅 Moduł Wizyt
-* Umawianie wizyt poprzez wiązanie relacji: `Visit ID` + `Patient ID` + `Doctor ID` + `Data`.
-* Zabezpieczenie przed rezerwacją wizyty dla nieistniejącego pacjenta lub lekarza.
-* Automatyczna weryfikacja dostępności lekarza w wybranym dniu (blokada duplikacji terminów).
-* Możliwość odwoływania zaplanowanych wizyt.
+W zależności od używanego systemu operacyjnego, wykonaj poniższe polecenie w terminalu, upewniając się, że jesteś w **głównym katalogu projektu** (tam, gdzie znajduje się folder `src`).
 
----
+### Windows (PowerShell)
+```powershell
+g++ -std=c++17 src/main.cpp src/models/*.cpp src/services/*.cpp src/ui/*.cpp src/tests/*.cpp src/utils/*.cpp -o program.exe; .\program.exe
 
-## 🛠️ Architektura Projektu
+## Wymagania
+* Kompilator C++ wspierający standard C++17 (np. GCC, MinGW, Clang).
+* Środowisko z obsługą terminala (Windows PowerShell, Terminal macOS/Linux).
 
-Aplikacja została zaprojektowana zgodnie z podziałem na warstwy (gwarantującym czystość kodu i łatwość rozbudowy):
+## Autorzy
+* Ania
+* Wiktoria
+* Patrycja
 
-* **Models (Warstwa Danych):** Klasy `Patient`, `Doctor`, `Visit` reprezentujące obiekty biznesowe.
-* **Services (Warstwa Logiki):** Klasy `PatientService`, `DoctorService`, `VisitService` odpowiadające za przetwarzanie danych i reguły biznesowe aplikacji.
-* **UI (Warstwa Prezentacji):** Klasa `MenuUI` odpowiedzialna za interakcję z użytkownikiem poprzez konsolę.
-* **Utils (Narzędzia):** Klasa `Validator` służąca do sprawdzania poprawności wprowadzanych ciągów tekstowych.
-
----
-
-## 💻 Instrukcja Uruchomienia
-
-Aplikacja uruchamia się bezpośrednio w konsoli systemowej. Przy każdym starcie wykonywane są automatyczne testy integracyjne backendu, weryfikujące poprawność działania modułów.
-
-### Kompilacja (wymagany kompilator zgodny ze standardem C++17/C++20):
-```bash
-g++ main.cpp src/ui/MenuUI.cpp src/services/PatientService.cpp src/services/DoctorService.cpp src/services/VisitService.cpp -o S_Z_P_M
+## Licencja
+Projekt stworzony na potrzeby edukacyjne. Wszelkie prawa zastrzeżone.
