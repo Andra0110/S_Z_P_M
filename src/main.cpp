@@ -27,7 +27,9 @@ int main(int argc, char* argv[])
 
     // AUTOMATYCZNE WCZYTANIE BAZY PACJENTÓW Z PLIKU PRZY STARCIE
     patientService.loadFromFile();
-    doctorService.loadFromFile(); 
+    doctorService.loadFromFile();
+    visitService.loadFromFile();
+    
 
     if (argc > 1 && std::strcmp(argv[1], "--test") == 0)
     {
