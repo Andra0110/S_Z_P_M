@@ -54,6 +54,7 @@ std::vector<Patient> FileService::loadPatients(
     
     if (!file.is_open())
     {
+        std::cerr << "Error: Could not open file " << filename << " for reading.\n";
         return patients; // Zwraca pusty wektor, jeśli plik nie istnieje
     }
 
@@ -143,6 +144,7 @@ std::vector<Doctor> FileService::loadDoctors(
 
     if (!file.is_open())
     {
+        std::cerr << "Error: Could not open file " << filename << " for reading.\n";
         return doctors;
     }
 
@@ -158,7 +160,6 @@ std::vector<Doctor> FileService::loadDoctors(
         std::string lastName;
         std::string specialization;
 
-        // POPRAWIONE: Zmiana ',' na ';' w celu zachowania spójności z zapisem
         if (std::getline(ss, idStr, ';') &&
             std::getline(ss, firstName, ';') &&
             std::getline(ss, lastName, ';') &&
@@ -233,6 +234,7 @@ std::vector<Visit> FileService::loadVisits(
 
     if (!file.is_open())
     {
+        std::cerr << "Error: Could not open file " << filename << " for reading.\n";
         return visits;
     }
 
