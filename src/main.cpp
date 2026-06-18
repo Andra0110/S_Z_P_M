@@ -25,6 +25,9 @@ int main(int argc, char* argv[])
     DoctorService doctorService;
     VisitService visitService;
 
+    // AUTOMATYCZNE WCZYTANIE BAZY PACJENTÓW Z PLIKU PRZY STARCIE
+    patientService.loadFromFile();
+
     if (argc > 1 && std::strcmp(argv[1], "--test") == 0)
     {
         std::cout << "===========================================\n";
@@ -45,7 +48,6 @@ int main(int argc, char* argv[])
         std::cin.get(); 
     }
 
-    
     MenuUI ui(patientService, doctorService, visitService);
     ui.run();
 

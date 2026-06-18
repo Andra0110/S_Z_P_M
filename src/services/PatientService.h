@@ -1,6 +1,11 @@
+#ifndef PATIENTSERVICE_H
+#define PATIENTSERVICE_H
+
 #pragma once
 
+#include <string>
 #include <vector>
+
 #include "../models/Patient.h"
 
 /**
@@ -11,6 +16,7 @@ class PatientService
 {
     private:
         std::vector<Patient> patients;
+        const std::string filename = "patients.csv";
 
     public:
 
@@ -55,5 +61,11 @@ class PatientService
         * @return const std::vector<Patient>& List of patients.
         */
        const std::vector<Patient>& getPatients() const;
-     
-     };
+
+       void loadFromFile();
+       void saveToFile() const;
+
+    };
+
+
+#endif
