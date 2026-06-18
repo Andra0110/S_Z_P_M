@@ -15,6 +15,7 @@ class VisitService
 {
     private:
         std::vector<Visit> visits;
+        const std::string filename = "visits.csv";
 
     public:
 
@@ -102,5 +103,8 @@ void displayVisitsByPatient(
 void displayVisitsByDoctor(
     int doctorId
 ) const;
+
+void loadFromFile();
+void saveToFile() const;
 
 };
