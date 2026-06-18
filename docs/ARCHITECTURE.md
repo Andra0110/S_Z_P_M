@@ -17,4 +17,3 @@ S_Z_P_M/
     ├── tests/            # Testy automatyczne komponentów
     ├── ui/               # Interfejs użytkownika (grafika tekstowa)
     └── utils/            # Narzędzia pomocnicze (np. walidacja)
-    
