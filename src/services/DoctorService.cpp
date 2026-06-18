@@ -1,5 +1,7 @@
 #include "DoctorService.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 /**
  * @brief Adds a new doctor to the system.
@@ -9,6 +11,7 @@
 void DoctorService::addDoctor(const Doctor& doctor)
 {
     doctors.push_back(doctor);
+    saveToFile(); // <-- TUTAJ DOPISAŁEM WYWOŁANIE ZAPISU
 }
 
 /**
@@ -71,7 +74,8 @@ bool DoctorService::removeDoctor(int id)
     {
         if (it->getId() == id)
         {
-            it = doctors.erase(it); // Bezpieczne usunięcie elementu bez unieważniania iteratora
+            it = doctors.erase(it);
+            saveToFile();
             return true;
         }
         else
@@ -91,4 +95,58 @@ bool DoctorService::removeDoctor(int id)
 const std::vector<Doctor>& DoctorService::getDoctors() const
 {
     return doctors;
+}
+
+/**
+ * @brief Zapisuje wszystkich lekarzy do pliku CSV.
+ */
+void DoctorService::saveToFile() const
+{
+    std::ofstream file(filename);
+    if (!file.is_open()) return;
+
+    for (const auto& doctor : doctors)
+    {
+        file << doctor.getId() << ";"
+             << doctor.getFirstName() << ";"
+             << doctor.getLastName() << ";"
+             << doctor.getSpecialization() << "\n";
+    }
+    file.close();
+}
+
+/**
+ * @brief Wczytuje lekarzy z pliku CSV.
+ */
+void DoctorService::loadFromFile()
+{
+    std::ifstream file(filename);
+    if (!file.is_open()) return;
+
+    doctors.clear();
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty()) continue;
+
+        std::stringstream ss(line);
+        std::string idStr, firstName, lastName, specialization;
+
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, firstName, ';') &&
+            std::getline(ss, lastName, ';') &&
+            std::getline(ss, specialization, ';'))
+        {
+            try {
+                int id = std::stoi(idStr);
+                Doctor doctor(id, firstName, lastName, specialization);
+                doctors.push_back(doctor);
+            }
+            catch (...) {
+                continue;
+            }
+        }
+    }
+    file.close();
 }

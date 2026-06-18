@@ -11,6 +11,7 @@ class DoctorService
 {
     private:
         std::vector<Doctor> doctors;
+        const std::string filename = "doctors.csv";
     
     public:
 
@@ -50,4 +51,7 @@ class DoctorService
     * @return const std::vector<Doctor>& List of doctors.
     */
     const std::vector<Doctor>& getDoctors() const;
+
+    void loadFromFile();
+    void saveToFile() const;
 };
