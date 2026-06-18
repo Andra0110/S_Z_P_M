@@ -20,6 +20,12 @@ Klasa `MenuUI` jest agregatorem usług biznesowych i wstrzykuje referencje do se
 
 ```cpp
 MenuUI(PatientService& pService, DoctorService& dService, VisitService& vService);
+```
+
+## 3. Struktura Katalogów i Modułów Projektu
+Projekt opiera się na strukturze modułowej, gdzie każdy komponent ma ściśle zdefiniowaną odpowiedzialność:
+
+```text
 src/
 │
 ├── models/             # Warstwa Modelu (Definicje obiektów/encji)
@@ -39,6 +45,11 @@ src/
 │   └── Validator.h / .cpp  - Statyczna walidacja danych (PESEL, daty, formaty)
 │
 └── main.cpp            # Punkt wejścia aplikacji (Inicjalizacja i DI)
+```
+## 4. Architektura Powiązań Między Modułami (Diagram Klas)
+Poniższy diagram przedstawia relacje oraz zależności pomiędzy kluczowymi komponentami systemu. GitHub automatycznie renderuje poniższy kod do postaci graficznej za pomocą silnika Mermaid.
+
+```mermaid
 classDiagram
     class main {
         +main(argc, argv) int
@@ -83,6 +94,7 @@ classDiagram
         +validateDate(string date) bool
     }
 
+    
     main --> MenuUI : Inicjalizuje i wstrzykuje zależności
     MenuUI --> PatientService : Wywołuje akcje pacjentów
     MenuUI --> DoctorService : Wywołuje akcje lekarzy
@@ -90,4 +102,5 @@ classDiagram
     MenuUI ..> Validator : Waliduje błędy wejścia
     VisitService --> PatientService : Sprawdza istnienie Pacjenta (ID)
     VisitService --> DoctorService : Sprawdza dostępność Lekarza (ID)
-    git add docs/TECHNICAL_DOCUMENTATION.md
+    ```
+    
