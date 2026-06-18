@@ -1,5 +1,7 @@
 #include "PatientService.h"
 #include <iostream>
+#include <fstream>  // Potrzebne do obsługi plików (ifstream, ofstream)
+#include <sstream>  // Potrzebne do rozbijania tekstu (stringstream)
 
 /**
  * @brief Adds a new patient to the system.
@@ -9,6 +11,7 @@
 void PatientService::addPatient(const Patient& patient)
 {
     patients.push_back(patient);
+    saveToFile(); // Automatyczny zapis po dodaniu pacjenta
 }
 
 /**
@@ -16,6 +19,12 @@ void PatientService::addPatient(const Patient& patient)
  */
 void PatientService::displayPatients() const
 {
+    if (patients.empty())
+    {
+        std::cout << "The patient registry is empty.\n";
+        return;
+    }
+
     for (const auto& patient : patients)
     {
         std::cout << "ID: " 
@@ -72,6 +81,7 @@ bool PatientService::removePatient(int id)
         if (it->getId() == id)
         {
             it = patients.erase(it); // Bezpieczne usunięcie elementu z wektora
+            saveToFile();            // Automatyczny zapis po usunięciu pacjenta
             return true;
         }
         else
@@ -91,4 +101,78 @@ bool PatientService::removePatient(int id)
 const std::vector<Patient>& PatientService::getPatients() const
 {
     return patients;
+}
+
+// =========================================================================
+// === PERSISTENCE LAYER IMPLEMENTATION (ZAPIS / ODCZYT PLIKÓW CSV) ===
+// =========================================================================
+
+/**
+ * @brief Zapisuje wszystkich pacjentów z pamięci RAM do pliku CSV.
+ */
+void PatientService::saveToFile() const
+{
+    std::ofstream file(filename);
+    if (!file.is_open())
+    {
+        std::cout << "[Błąd zapisu] Nie można otworzyć pliku bazy danych: " << filename << "\n";
+        return;
+    }
+
+    // Mapujemy obiekty z wektora na linie tekstu rozdzielone średnikami
+    for (const auto& patient : patients)
+    {
+        file << patient.getId() << ";"
+             << patient.getFirstName() << ";"
+             << patient.getLastName() << ";"
+             << patient.getPesel() << "\n";
+    }
+
+    file.close();
+}
+
+/**
+ * @brief Wczytuje pacjentów z pliku CSV i umieszcza ich w wektorze.
+ */
+void PatientService::loadFromFile()
+{
+    std::ifstream file(filename);
+    if (!file.is_open())
+    {
+        // Brak pliku przy pierwszym uruchomieniu programu to normalna sprawa,
+        // dlatego po prostu przerywamy funkcję bez wyrzucania błędu.
+        return;
+    }
+
+    patients.clear(); // Czyszczenie pamięci przed wczytaniem, zabezpiecza przed duplikacją
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty()) continue;
+
+        std::stringstream ss(line);
+        std::string idStr, firstName, lastName, pesel;
+
+        // Parsowanie linii tekstu według średnika (separator CSV)
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, firstName, ';') &&
+            std::getline(ss, lastName, ';') &&
+            std::getline(ss, pesel, ';'))
+        {
+            try 
+            {
+                int id = std::stoi(idStr); // Bezpieczna konwersja string na int
+                Patient patient(id, firstName, lastName, pesel);
+                patients.push_back(patient);
+            }
+            catch (...) 
+            {
+                // Ignorujemy uszkodzone lub ręcznie zmodyfikowane linie w pliku tekstowym
+                continue;
+            }
+        }
+    }
+
+    file.close();
 }
