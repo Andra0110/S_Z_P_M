@@ -1,102 +1,78 @@
-# Diagramy Klas UML Systemu S_Z_P_M
+# Diagramy Klas UML Systemu S_Z_P_M (#14, #54)
 
-Poniższy diagram przedstawia strukturę klas systemu zarządzania placówką medyczną, odwzorowując powiązania pomiędzy modelami danych, usługami biznesowymi a interfejsem użytkownika.
+Niniejszy dokument przedstawia strukturę obiektową aplikacji oraz relacje pomiędzy poszczególnymi warstwami systemu zarządzania placówką medyczną.
 
-## 1. Kod Diagramu Klas (PlantUML)
+---
 
-```plantuml
-@startuml
-skinparam classAttributeIconSize 0
+## 1. Wyrenderowany Diagram Klas
 
-package "Models" {
+```mermaid
+classDiagram
     class Patient {
-        - id: int
-        - firstName: string
-        - lastName: string
-        - pesel: string
-        + getFirstName(): string
-        + getLastName(): string
-        + getPesel(): string
-        + setFirstName(name: string): void
-        + setLastName(name: string): void
+        -int id
+        -string firstName
+        -string lastName
+        -string pesel
+        +getFirstName() string
+        +getLastName() string
+        +getPesel() string
+        +setFirstName(string name)
+        +setLastName(string name)
     }
 
     class Doctor {
-        - id: int
-        - firstName: string
-        - lastName: string
-        - specialization: string
-        + getFirstName(): string
-        + getLastName(): string
-        + getSpecialization(): string
+        -int id
+        -string firstName
+        -string lastName
+        -string specialization
+        +getFirstName() string
+        +getLastName() string
+        +getSpecialization() string
     }
 
     class Visit {
-        - id: int
-        - patientId: int
-        - doctorId: int
-        - date: string
-        + getPatientId(): int
-        + getDoctorId(): int
-        + getDate(): string
+        -int id
+        -int patientId
+        -int doctorId
+        -string date
+        +getPatientId() int
+        +getDoctorId() int
+        +getDate() string
     }
-}
 
-package "Services" {
     class PatientService {
-        + addPatient(p: Patient): void
-        + removePatient(id: int): bool
-        + searchPatientById(id: int): Patient*
-        + displayPatients(): void
+        +addPatient(Patient p)
+        +removePatient(int id) bool
+        +searchPatientById(int id) Patient*
+        +displayPatients()
     }
 
     class DoctorService {
-        + addDoctor(d: Doctor): void
-        + searchDoctorById(id: int): Doctor*
-        + displayDoctors(): void
+        +addDoctor(Doctor d)
+        +searchDoctorById(int id) Doctor*
+        +displayDoctors()
     }
 
     class VisitService {
-        + addVisit(v: Visit): void
-        + removeVisit(id: int): bool
-        + searchVisitById(id: int): Visit*
-        + displayVisits(): void
-        + canCreateVisit(pId: int, dId: int, ps: PatientService, ds: DoctorService): bool
-        + isDoctorAvailable(dId: int, date: string): bool
+        +addVisit(Visit v)
+        +removeVisit(int id) bool
+        +searchVisitById(int id) Visit*
+        +displayVisits()
+        +canCreateVisit() bool
+        +isDoctorAvailable() bool
     }
-}
 
-package "UI" {
     class MenuUI {
-        - patientService: PatientService&
-        - doctorService: DoctorService&
-        - visitService: VisitService&
-        + MenuUI(ps: PatientService&, ds: DoctorService&, vs: VisitService&)
-        + run(): void
-        - handlePatientMenu(): void
-        - handleDoctorMenu(): void
-        - handleVisitMenu(): void
-        - addNewPatient(): void
-        - addNewVisit(): void
-        - clearInputBuffer(): void
+        -PatientService patientService
+        -DoctorService doctorService
+        -VisitService visitService
+        +run()
     }
-}
 
-package "Utils" {
-    class Validator {
-        {static} + isValidName(name: string): bool
-        {static} + isValidPesel(pesel: string): bool
-        {static} + isValidDate(date: string): bool
-    }
-}
-
-MenuUI --> PatientService : używa
-MenuUI --> DoctorService : używa
-MenuUI --> VisitService : używa
-
-PatientService "1" *-- "wiele" Patient : przechowuje
-DoctorService "1" *-- "wiele" Doctor : przechowuje
-VisitService "1" *-- "wiele" Visit : przechowuje
-
-MenuUI ..> Validator : wywołuje walidację
-@endum
+    MenuUI --> PatientService : używa
+    MenuUI --> DoctorService : używa
+    MenuUI --> VisitService : używa
+    PatientService "1" *-- "wiele" Patient : przechowuje
+    DoctorService "1" *-- "wiele" Doctor : przechowuje
+    VisitService "1" *-- "wiele" Visit : przechowuje
+    
