@@ -1,6 +1,8 @@
 #include "VisitService.h"
 #include <iostream>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 /**
  * @brief Adds a new visit if the doctor is available.
@@ -12,6 +14,7 @@ void VisitService::addVisit(const Visit& visit)
     if (isDoctorAvailable(visit.getDoctorId(), visit.getDate()))
     {
         visits.push_back(visit);
+        saveToFile(); // <-- KLUCZOWA POPRAWKA: Zrzucamy wektor z RAMu do pliku CSV
         std::cout << "[Success] Visit with ID " << visit.getId() << " has been successfully added.\n";
     }
     else
@@ -74,6 +77,7 @@ bool VisitService::removeVisit(int id)
         if (it->getId() == id)
         {
             visits.erase(it);
+            saveToFile(); // <-- KLUCZOWA POPRAWKA: Aktualizujemy plik CSV po usunięciu
             std::cout << "[Success] Visit with ID " << id << " has been cancelled.\n";
             return true;
         }
@@ -190,4 +194,61 @@ void VisitService::displayVisitsByDoctor(int doctorId) const
     {
         std::cout << "No scheduled appointments found for this doctor.\n";
     }
+}
+
+/**
+ * @brief Zapisuje wszystkie wizyty do pliku CSV.
+ */
+void VisitService::saveToFile() const
+{
+    std::ofstream file(filename);
+    if (!file.is_open()) return;
+
+    for (const auto& visit : visits)
+    {
+        file << visit.getId() << ";"
+             << visit.getPatientId() << ";"
+             << visit.getDoctorId() << ";"
+             << visit.getDate() << "\n";
+    }
+    file.close();
+}
+
+/**
+ * @brief Wczytuje wizyty z pliku CSV.
+ */
+void VisitService::loadFromFile()
+{
+    std::ifstream file(filename);
+    if (!file.is_open()) return;
+
+    visits.clear();
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty()) continue;
+
+        std::stringstream ss(line);
+        std::string idStr, patientIdStr, doctorIdStr, date;
+
+        if (std::getline(ss, idStr, ';') &&
+            std::getline(ss, patientIdStr, ';') &&
+            std::getline(ss, doctorIdStr, ';') &&
+            std::getline(ss, date, ';'))
+        {
+            try {
+                int id = std::stoi(idStr);
+                int patientId = std::stoi(patientIdStr);
+                int doctorId = std::stoi(doctorIdStr);
+                
+                Visit visit(id, patientId, doctorId, date);
+                visits.push_back(visit);
+            }
+            catch (...) {
+                continue; // Ignoruj błędne linie
+            }
+        }
+    }
+    file.close();
 }
