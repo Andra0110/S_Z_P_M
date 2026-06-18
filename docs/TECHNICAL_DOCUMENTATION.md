@@ -90,4 +90,4 @@ classDiagram
     MenuUI ..> Validator : Waliduje błędy wejścia
     VisitService --> PatientService : Sprawdza istnienie Pacjenta (ID)
     VisitService --> DoctorService : Sprawdza dostępność Lekarza (ID)
-    
+    git add docs/TECHNICAL_DOCUMENTATION.md
