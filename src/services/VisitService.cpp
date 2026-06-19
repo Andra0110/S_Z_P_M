@@ -1,3 +1,8 @@
+/**
+ * @file VisitService.cpp
+ * @brief Implementation of the VisitService class.
+ */
+
 #include "VisitService.h"
 #include <iostream>
 #include <algorithm>
@@ -14,7 +19,7 @@ void VisitService::addVisit(const Visit& visit)
     if (isDoctorAvailable(visit.getDoctorId(), visit.getDate()))
     {
         visits.push_back(visit);
-        saveToFile(); // <-- KLUCZOWA POPRAWKA: Zrzucamy wektor z RAMu do pliku CSV
+        saveToFile();
         std::cout << "[Success] Visit with ID " << visit.getId() << " has been successfully added.\n";
     }
     else
@@ -49,7 +54,7 @@ void VisitService::displayVisits() const
  * @brief Searches for a visit by its unique identifier.
  *
  * @param id Visit identifier.
- * @return Visit* Pointer to found visit, or nullptr if not found.
+ * @return Pointer to the found visit, or `nullptr` if not found.
  */
 Visit* VisitService::searchVisitById(int id)
 {
@@ -67,19 +72,24 @@ Visit* VisitService::searchVisitById(int id)
  * @brief Removes a visit from the calendar by its ID.
  *
  * @param id Visit identifier.
- * @return true If the visit was successfully removed.
- * @return false If the visit was not found.
+ * @retval true If the visit was successfully removed.
+ * @retval false If the visit was not found.
  */
 bool VisitService::removeVisit(int id)
 {
-    for (auto it = visits.begin(); it != visits.end(); ++it)
+    // Poprawione unieważnianie iteratorów przez przypisanie wyniku erase() do 'it'
+    for (auto it = visits.begin(); it != visits.end(); )
     {
         if (it->getId() == id)
         {
-            visits.erase(it);
-            saveToFile(); // <-- KLUCZOWA POPRAWKA: Aktualizujemy plik CSV po usunięciu
+            it = visits.erase(it);
+            saveToFile(); 
             std::cout << "[Success] Visit with ID " << id << " has been cancelled.\n";
             return true;
+        }
+        else
+        {
+            ++it;
         }
     }
     std::cout << "[Error] Visit with ID " << id << " could not be found.\n";
@@ -91,8 +101,8 @@ bool VisitService::removeVisit(int id)
  *
  * @param doctorId Doctor identifier.
  * @param date The date and time string to check.
- * @return true If the doctor has no other appointments at that time.
- * @return false If there is a scheduling conflict.
+ * @retval true If the doctor has no other appointments at that time.
+ * @retval false If there is a scheduling conflict.
  */
 bool VisitService::isDoctorAvailable(int doctorId, const std::string& date) const
 {
@@ -123,8 +133,8 @@ const std::vector<Visit>& VisitService::getVisits() const
  * @param doctorId Doctor identifier.
  * @param patientService Reference to Patient Service for validation.
  * @param doctorService Reference to Doctor Service for validation.
- * @return true If both patient and doctor exist.
- * @return false If either the patient or doctor cannot be found.
+ * @retval true If both patient and doctor exist.
+ * @retval false If either the patient or doctor cannot be found.
  */
 bool VisitService::canCreateVisit(
     int patientId,
@@ -197,7 +207,7 @@ void VisitService::displayVisitsByDoctor(int doctorId) const
 }
 
 /**
- * @brief Zapisuje wszystkie wizyty do pliku CSV.
+ * @brief Saves all visits to a CSV file.
  */
 void VisitService::saveToFile() const
 {
@@ -215,7 +225,7 @@ void VisitService::saveToFile() const
 }
 
 /**
- * @brief Wczytuje wizyty z pliku CSV.
+ * @brief Loads visits from a CSV file and places them in a vector.
  */
 void VisitService::loadFromFile()
 {
@@ -246,7 +256,7 @@ void VisitService::loadFromFile()
                 visits.push_back(visit);
             }
             catch (...) {
-                continue; // Ignoruj błędne linie
+                continue; 
             }
         }
     }

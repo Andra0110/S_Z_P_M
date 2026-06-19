@@ -1,3 +1,8 @@
+/**
+ * @file PatientTests.h
+ * @brief Header file for the Patient module test functions.
+ */
+
 #ifndef PATIENT_TESTS_H
 #define PATIENT_TESTS_H
 

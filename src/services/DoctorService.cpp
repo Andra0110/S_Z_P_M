@@ -1,3 +1,8 @@
+/**
+ * @file DoctorService.cpp
+ * @brief Implementation of the DoctorService class.
+ */
+
 #include "DoctorService.h"
 #include <iostream>
 #include <fstream>
@@ -11,7 +16,7 @@
 void DoctorService::addDoctor(const Doctor& doctor)
 {
     doctors.push_back(doctor);
-    saveToFile(); // <-- TUTAJ DOPISAŁEM WYWOŁANIE ZAPISU
+    saveToFile(); 
 }
 
 /**
@@ -37,16 +42,15 @@ void DoctorService::displayDoctors() const
                   << doctor.getSpecialization()
                   << "\n";
                   
-        std::cout << std::endl; // Pusta linia odstępu między lekarzami
+        std::cout << std::endl; 
     }
 }
 
 /**
- * @brief Searches doctor by ID.
+ * @brief Searches for a doctor by their ID.
  *
  * @param id Doctor identifier.
- * @return Doctor* Pointer to found doctor.
- * @return nullptr If doctor was not found.
+ * @return Pointer to the found doctor, or `nullptr` if not found.
  */
 Doctor* DoctorService::searchDoctorById(int id)
 {
@@ -62,11 +66,11 @@ Doctor* DoctorService::searchDoctorById(int id)
 }
 
 /**
- * @brief Removes doctor by ID.
+ * @brief Removes a doctor by their ID.
  *
  * @param id Doctor identifier.
- * @return true If doctor was removed.
- * @return false If doctor was not found.
+ * @retval true If the doctor was successfully removed.
+ * @retval false If the doctor was not found.
  */
 bool DoctorService::removeDoctor(int id)
 {
@@ -98,7 +102,7 @@ const std::vector<Doctor>& DoctorService::getDoctors() const
 }
 
 /**
- * @brief Zapisuje wszystkich lekarzy do pliku CSV.
+ * @brief Saves all doctors to a CSV file.
  */
 void DoctorService::saveToFile() const
 {
@@ -116,7 +120,7 @@ void DoctorService::saveToFile() const
 }
 
 /**
- * @brief Wczytuje lekarzy z pliku CSV.
+ * @brief Loads doctors from a CSV file.
  */
 void DoctorService::loadFromFile()
 {

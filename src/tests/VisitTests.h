@@ -1,3 +1,8 @@
+/**
+ * @file VisitTests.h
+ * @brief Header file for the Visit module integration tests.
+ */
+
 #ifndef VISIT_TESTS_H
 #define VISIT_TESTS_H
 

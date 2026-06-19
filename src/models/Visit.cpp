@@ -1,7 +1,17 @@
+/**
+ * @file Visit.cpp
+ * @brief Implementation of the Visit class.
+ */
+
 #include "Visit.h"
 
 /**
  * @brief Constructs a Visit object.
+ *
+ * @param id Visit identifier.
+ * @param patientId Patient identifier.
+ * @param doctorId Doctor identifier.
+ * @param date Appointment date.
  */
 Visit::Visit(
     int id,
@@ -10,11 +20,11 @@ Visit::Visit(
     const std::string& date
 )
     : id(id),
-    patientId(patientId),
-    doctorId(doctorId),
-    date(date)
- {
- }
+      patientId(patientId),
+      doctorId(doctorId),
+      date(date)
+{
+}
 
 /**
  * @brief Gets visit ID.
@@ -29,7 +39,7 @@ int Visit::getId() const
 /**
  * @brief Gets patient ID.
  *
- * @return int patient identifier.
+ * @return int Patient identifier.
  */
 int Visit::getPatientId() const
 {
@@ -39,7 +49,7 @@ int Visit::getPatientId() const
 /**
  * @brief Gets doctor ID.
  *
- * @return int doctor identifier.
+ * @return int Doctor identifier.
  */
 int Visit::getDoctorId() const
 {

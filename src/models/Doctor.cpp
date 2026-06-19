@@ -1,3 +1,8 @@
+/**
+ * @file Doctor.cpp
+ * @brief Implementation of the Doctor class.
+ */
+
 #include "Doctor.h"
 
 /**

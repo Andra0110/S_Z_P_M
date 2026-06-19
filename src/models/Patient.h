@@ -1,3 +1,8 @@
+/**
+ * @file Patient.h
+ * @brief Header file for the Patient class.
+ */
+
 #pragma once
 
 #include <string>
@@ -59,19 +64,22 @@ class Patient
 
         /**
          * @brief Sets a new first name for the patient.
-         * * @param firstName The new first name.
+         * 
+         * @param firstName The new first name.
          */
         void setFirstName(const std::string& firstName);
 
         /**
          * @brief Sets a new last name for the patient.
-         * * @param lastName The new last name.
+         * 
+         * @param lastName The new last name.
          */
         void setLastName(const std::string& lastName);
 
         /**
          * @brief Sets a new PESEL number for the patient.
-         * * @param pesel The new PESEL number.
+         * 
+         * @param pesel The new PESEL number.
          */
         void setPesel(const std::string& pesel);        
 };

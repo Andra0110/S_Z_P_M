@@ -1,3 +1,8 @@
+/**
+ * @file Validator.cpp
+ * @brief Implementation of utility functions for input validation.
+ */
+
 #include "Validator.h"
 
 #include <cctype>
@@ -7,8 +12,8 @@
  * @brief Validates patient's first or last name.
  *
  * @param name Name to validate.
- * @return true If name is valid.
- * @return false If name is invalid.
+ * @retval true If the name contains only alphabetic characters, spaces, or hyphens.
+ * @retval false If the name is empty or contains invalid characters.
  */
 bool Validator::isValidName(const std::string& name)
 {
@@ -19,7 +24,6 @@ bool Validator::isValidName(const std::string& name)
 
     for (char character : name)
     {
-        // Zapewniamy bezpieczne rzutowanie oraz dopuszczamy spacje i myślniki (przydatne przy nazwiskach)
         if (!std::isalpha(static_cast<unsigned char>(character)) && character != ' ' && character != '-')
         {
             return false;
@@ -32,9 +36,9 @@ bool Validator::isValidName(const std::string& name)
 /**
  * @brief Validates PESEL number.
  *
- * @param pesel PESEL to validate.
- * @return true If PESEL is valid.
- * @return false If PESEL is invalid.
+ * @param pesel PESEL string to validate.
+ * @retval true If the PESEL consists of exactly 11 digits.
+ * @retval false If the length is incorrect or non-digit characters are found.
  */
 bool Validator::isValidPesel(const std::string& pesel)
 {
@@ -57,9 +61,9 @@ bool Validator::isValidPesel(const std::string& pesel)
 /**
  * @brief Validates doctor's specialization.
  *
- * @param specialization Doctor specialization.
- * @return true If specialization is valid.
- * @return false If specialization is invalid.
+ * @param specialization Doctor specialization string to validate.
+ * @retval true If the specialization contains only alphabetic characters, spaces, or hyphens.
+ * @retval false If the string is empty or contains invalid characters.
  */
 bool Validator::isValidSpecialization(const std::string& specialization)
 {
@@ -82,13 +86,12 @@ bool Validator::isValidSpecialization(const std::string& specialization)
 /**
  * @brief Validates appointment date format.
  *
- * @param date Date to validate.
- * @return true If date format matches YYYY-MM-DD HH:MM.
- * @return false If date format is invalid.
+ * @param date Date string to validate.
+ * @retval true If the date format matches the explicit pattern YYYY-MM-DD HH:MM.
+ * @retval false If the date format is invalid or does not match the regex.
  */
 bool Validator::isValidDate(const std::string& date)
 {
-    // Wyrażenie regularne doskonale pilnuje układu cyfr i separatorów
     std::regex pattern(
         R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2})"
     );

@@ -1,17 +1,35 @@
-# Foldery
+# --- Foldery środowiskowe ---
 build/
 .vscode/
 .vs/
 
-# Pliki wykonywalne i binarki
-*.exe
-*.o
-program
-bezpieczny_test
-
-# Pliki tymczasowe systemu
+# --- macOS system files ---
 .DS_Store
 Thumbs.db
 
-# Pliki testowe
+# --- Execution binaries ---
+main_mac
+test-code
+test
+program
+bezpieczny_test
+*.exe
+*.o
+*.out
+
+# --- Debug symbols directory ---
+*.dSYM/
+main_mac.dSYM/
+
+# --- Doxygen generated documentation ---
+src/html/
+src/latex/
+doxygen_objdb_*.tmp
+
+# --- Local database files (Persistence) ---
+*.txt
+*.csv
+data/
+
+# --- Pliki testowe tymczasowe ---
 test-code*.cpp

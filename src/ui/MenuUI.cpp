@@ -1,8 +1,12 @@
+/**
+ * @file MenuUI.cpp
+ * @brief Implementation of the console user interface for the clinic management system.
+ */
+
 #include "MenuUI.h"
 #include <iostream>
 #include <limits>
 
-// Prywatne kody kolorów ANSI ułatwiające zarządzanie UX
 namespace {
     const std::string RESET   = "\033[0m";
     const std::string RED     = "\033[31m";
@@ -11,6 +15,9 @@ namespace {
     const std::string CYAN    = "\033[36m";
     const std::string BOLD    = "\033[1m";
 
+    /**
+     * @brief Helper function to pause terminal execution until Enter is pressed.
+     */
     void pressEnterToContinue() {
         std::cout << "\n" << CYAN << "Press Enter to continue..." << RESET;
         std::cin.clear();
@@ -70,6 +77,9 @@ void MenuUI::run() {
 // === PATIENT SUBMENU IMPLEMENTATION ===
 // =========================================================================
 
+/**
+ * @brief Handles the lifecycle loop of the Patient Management submenu.
+ */
 void MenuUI::handlePatientMenu() {
     int choice = 0;
     while (true) {
@@ -97,6 +107,9 @@ void MenuUI::handlePatientMenu() {
     }
 }
 
+/**
+ * @brief Prints the text options for patient management.
+ */
 void MenuUI::displayPatientMenu() const {
     std::cout << CYAN << "--- PATIENT MANAGEMENT ---\n" << RESET;
     std::cout << "1. Add New Patient\n";
@@ -108,6 +121,9 @@ void MenuUI::displayPatientMenu() const {
     std::cout << "\nEnter your choice: ";
 }
 
+/**
+ * @brief Prompts user for details and stores a new Patient entity.
+ */
 void MenuUI::addNewPatient() {
     std::cout << CYAN << "\n[ADD NEW PATIENT]\n" << RESET;
     int id;
@@ -132,11 +148,17 @@ void MenuUI::addNewPatient() {
     std::cout << GREEN << "\nSuccess: Patient has been successfully added.\n" << RESET;
 }
 
+/**
+ * @brief Outputs all stored patient information.
+ */
 void MenuUI::displayAllPatients() const {
     std::cout << CYAN << "\n[PATIENT LIST]\n" << RESET;
     patientService.displayPatients(); 
 }
 
+/**
+ * @brief Performs a search for a patient based on console ID input.
+ */
 void MenuUI::searchPatient() const {
     std::cout << CYAN << "\n[SEARCH PATIENT]\n" << RESET;
     int id;
@@ -157,6 +179,9 @@ void MenuUI::searchPatient() const {
     }
 }
 
+/**
+ * @brief Edits the fields of a specific patient record.
+ */
 void MenuUI::updatePatient() {
     std::cout << CYAN << "\n[EDIT PATIENT DATA]\n" << RESET;
     int id;
@@ -179,6 +204,9 @@ void MenuUI::updatePatient() {
     std::cout << GREEN << "\nSuccess: Patient data updated.\n" << RESET;
 }
 
+/**
+ * @brief Deletes a patient from the active data repository.
+ */
 void MenuUI::deletePatient() {
     std::cout << CYAN << "\n[DELETE PATIENT]\n" << RESET;
     int id;
@@ -200,6 +228,9 @@ void MenuUI::deletePatient() {
 // === DOCTOR SUBMENU IMPLEMENTATION ===
 // =========================================================================
 
+/**
+ * @brief Handles the lifecycle loop of the Doctor Management submenu.
+ */
 void MenuUI::handleDoctorMenu() {
     int choice = 0;
     while (true) {
@@ -225,6 +256,9 @@ void MenuUI::handleDoctorMenu() {
     }
 }
 
+/**
+ * @brief Prints the text options for doctor management.
+ */
 void MenuUI::displayDoctorMenu() const {
     std::cout << CYAN << "--- DOCTOR MANAGEMENT ---\n" << RESET;
     std::cout << "1. Add New Doctor\n";
@@ -234,6 +268,9 @@ void MenuUI::displayDoctorMenu() const {
     std::cout << "\nEnter your choice: ";
 }
 
+/**
+ * @brief Prompts user for details and stores a new Doctor entity.
+ */
 void MenuUI::addNewDoctor() {
     std::cout << CYAN << "\n[ADD NEW DOCTOR]\n" << RESET;
     int id;
@@ -258,11 +295,17 @@ void MenuUI::addNewDoctor() {
     std::cout << GREEN << "\nSuccess: Doctor has been successfully added.\n" << RESET;
 }
 
+/**
+ * @brief Outputs all registered doctor information.
+ */
 void MenuUI::displayAllDoctors() const {
     std::cout << CYAN << "\n[DOCTOR LIST]\n" << RESET;
     doctorService.displayDoctors(); 
 }
 
+/**
+ * @brief Performs a search for a doctor based on console ID input.
+ */
 void MenuUI::searchDoctor() const {
     std::cout << CYAN << "\n[SEARCH DOCTOR]\n" << RESET;
     int id;
@@ -287,6 +330,9 @@ void MenuUI::searchDoctor() const {
 // === VISIT SUBMENU IMPLEMENTATION ===
 // =========================================================================
 
+/**
+ * @brief Handles the lifecycle loop of the Appointment/Visit Management submenu.
+ */
 void MenuUI::handleVisitMenu() {
     int choice = 0;
     while (true) {
@@ -313,6 +359,9 @@ void MenuUI::handleVisitMenu() {
     }
 }
 
+/**
+ * @brief Prints the text options for appointment scheduling.
+ */
 void MenuUI::displayVisitMenu() const {
     std::cout << CYAN << "--- VISIT MANAGEMENT ---\n" << RESET;
     std::cout << "1. Book New Visit\n";
@@ -323,6 +372,9 @@ void MenuUI::displayVisitMenu() const {
     std::cout << "\nEnter your choice: ";
 }
 
+/**
+ * @brief Processes reservation rules and hooks into backend validation before reserving timeslots.
+ */
 void MenuUI::addNewVisit() {
     std::cout << CYAN << "\n[BOOK NEW VISIT]\n" << RESET;
     
@@ -354,11 +406,17 @@ void MenuUI::addNewVisit() {
     std::cout << GREEN << "\nSuccess: Visit booked successfully.\n" << RESET;
 }
 
+/**
+ * @brief Outpus all scheduled calendar visits.
+ */
 void MenuUI::displayAllVisits() const {
     std::cout << CYAN << "\n[ALL BOOKED VISITS]\n" << RESET;
     visitService.displayVisits(); 
 }
 
+/**
+ * @brief Searches and prints full details of a specific visit ID.
+ */
 void MenuUI::searchVisit() const {
     std::cout << CYAN << "\n[SEARCH VISIT]\n" << RESET;
     int id;
@@ -377,6 +435,9 @@ void MenuUI::searchVisit() const {
     }
 }
 
+/**
+ * @brief Calls removal routines to wipe a visit from backend calendars.
+ */
 void MenuUI::cancelVisit() {
     std::cout << CYAN << "\n[CANCEL VISIT]\n" << RESET;
     int id;
@@ -395,11 +456,20 @@ void MenuUI::cancelVisit() {
 // === UTILITIES IMPLEMENTATION ===
 // =========================================================================
 
+/**
+ * @brief Safely clears std::cin stream error state flags and discards unread data.
+ */
 void MenuUI::clearInputBuffer() const {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+/**
+ * @brief Enforces interactive terminal validation using predefined validation predicate hooks.
+ * @param prompt Text instruction to be printed to the output stream.
+ * @param validationFunc Pointer to the static utility validation function.
+ * @return A thoroughly verified std::string value matching the target regex rules.
+ */
 std::string MenuUI::getValidatedInput(const std::string& prompt, bool (*validationFunc)(const std::string&)) const {
     std::string input;
     while (true) {

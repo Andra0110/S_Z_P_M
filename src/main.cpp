@@ -1,3 +1,8 @@
+/**
+ * @file main.cpp
+ * @brief Main entry point for the S_Z_P_M medical management system.
+ */
+
 #include "tests/PatientTests.h"
 #include "tests/DoctorTests.h"
 #include "tests/VisitTests.h"
@@ -25,7 +30,7 @@ int main(int argc, char* argv[])
     DoctorService doctorService;
     VisitService visitService;
 
-    // AUTOMATYCZNE WCZYTANIE BAZY PACJENTÓW Z PLIKU PRZY STARCIE
+    
     patientService.loadFromFile();
     doctorService.loadFromFile();
     visitService.loadFromFile();

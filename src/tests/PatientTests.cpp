@@ -1,3 +1,8 @@
+/**
+ * @file PatientTests.cpp
+ * @brief Automated unit and integration tests for the Patient module.
+ */
+
 #include <iostream>
 
 #include "PatientTests.h"
@@ -15,7 +20,6 @@ void testPatients(
 {
     std::cout << "\n=== PATIENT TESTS ===\n";
 
-    // 1. Test tworzenia i dodawania pacjenta
     Patient patient1(
         1,
         "Anna",
@@ -26,17 +30,14 @@ void testPatients(
     patientService.addPatient(patient1);
     std::cout << "[TEST] Patient added to temporary session.\n";
 
-    // 2. Test zapisu do pliku (Zmieniono ścieżkę z "data/patients.txt" na "patients.txt")
     FileService::savePatients(
         patientService.getPatients(),
         "patients.txt"
     );
     std::cout << "[TEST] Patient data backed up to file.\n\n";
 
-    // 3. Test wyświetlania
     patientService.displayPatients();
 
-    // 4. Test wyszukiwania pacjenta po ID
     Patient* foundPatient =
         patientService.searchPatientById(1);
 
@@ -48,7 +49,6 @@ void testPatients(
                   << foundPatient->getLastName()
                   << "\n";
 
-        // 5. TEST EDYCJI (Weryfikacja nowo dodanych setterów)
         std::cout << "\n[TEST] Modifying patient's last name...\n";
         foundPatient->setLastName("Kowalska-Nowak");
         

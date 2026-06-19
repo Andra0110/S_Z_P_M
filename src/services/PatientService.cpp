@@ -1,7 +1,12 @@
+/**
+ * @file PatientService.cpp
+ * @brief Implementation of the PatientService class.
+ */
+
 #include "PatientService.h"
 #include <iostream>
-#include <fstream>  // Potrzebne do obsługi plików (ifstream, ofstream)
-#include <sstream>  // Potrzebne do rozbijania tekstu (stringstream)
+#include <fstream>  
+#include <sstream>  
 
 /**
  * @brief Adds a new patient to the system.
@@ -11,7 +16,7 @@
 void PatientService::addPatient(const Patient& patient)
 {
     patients.push_back(patient);
-    saveToFile(); // Automatyczny zapis po dodaniu pacjenta
+    saveToFile();
 }
 
 /**
@@ -43,16 +48,15 @@ void PatientService::displayPatients() const
                   << patient.getPesel()
                   << "\n";
                   
-        std::cout << std::endl; // Pusta linia odstępu między pacjentami
+        std::cout << std::endl;
     }
 }
 
 /**
- * @brief Searches patient by ID.
+ * @brief Searches for a patient by their ID.
  *
  * @param id Patient identifier.
- * @return Patient* Pointer to found patient.
- * @return nullptr If patient was not found.
+ * @return Pointer to the found patient, or `nullptr` if not found.
  */
 Patient* PatientService::searchPatientById(int id)
 {
@@ -68,11 +72,11 @@ Patient* PatientService::searchPatientById(int id)
 }
 
 /**
- * @brief Removes patient by ID.
+ * @brief Removes a patient by their ID.
  *
  * @param id Patient identifier.
- * @return true If patient was removed.
- * @return false If patient was not found.
+ * @retval true If the patient was successfully removed.
+ * @retval false If the patient was not found.
  */
 bool PatientService::removePatient(int id)
 {
@@ -80,8 +84,8 @@ bool PatientService::removePatient(int id)
     {
         if (it->getId() == id)
         {
-            it = patients.erase(it); // Bezpieczne usunięcie elementu z wektora
-            saveToFile();            // Automatyczny zapis po usunięciu pacjenta
+            it = patients.erase(it); 
+            saveToFile();            
             return true;
         }
         else
@@ -108,18 +112,17 @@ const std::vector<Patient>& PatientService::getPatients() const
 // =========================================================================
 
 /**
- * @brief Zapisuje wszystkich pacjentów z pamięci RAM do pliku CSV.
+ * @brief Saves all patients to a CSV file.
  */
 void PatientService::saveToFile() const
 {
     std::ofstream file(filename);
     if (!file.is_open())
     {
-        std::cout << "[Błąd zapisu] Nie można otworzyć pliku bazy danych: " << filename << "\n";
+        std::cout << "[Write Error] Could not open database file: " << filename << "\n";
         return;
     }
 
-    // Mapujemy obiekty z wektora na linie tekstu rozdzielone średnikami
     for (const auto& patient : patients)
     {
         file << patient.getId() << ";"
@@ -132,19 +135,17 @@ void PatientService::saveToFile() const
 }
 
 /**
- * @brief Wczytuje pacjentów z pliku CSV i umieszcza ich w wektorze.
+ * @brief Loads patients from a CSV file and places them in a vector.
  */
 void PatientService::loadFromFile()
 {
     std::ifstream file(filename);
     if (!file.is_open())
     {
-        // Brak pliku przy pierwszym uruchomieniu programu to normalna sprawa,
-        // dlatego po prostu przerywamy funkcję bez wyrzucania błędu.
         return;
     }
 
-    patients.clear(); // Czyszczenie pamięci przed wczytaniem, zabezpiecza przed duplikacją
+    patients.clear(); 
     std::string line;
 
     while (std::getline(file, line))
@@ -154,7 +155,6 @@ void PatientService::loadFromFile()
         std::stringstream ss(line);
         std::string idStr, firstName, lastName, pesel;
 
-        // Parsowanie linii tekstu według średnika (separator CSV)
         if (std::getline(ss, idStr, ';') &&
             std::getline(ss, firstName, ';') &&
             std::getline(ss, lastName, ';') &&
@@ -162,13 +162,12 @@ void PatientService::loadFromFile()
         {
             try 
             {
-                int id = std::stoi(idStr); // Bezpieczna konwersja string na int
+                int id = std::stoi(idStr);
                 Patient patient(id, firstName, lastName, pesel);
                 patients.push_back(patient);
             }
             catch (...) 
             {
-                // Ignorujemy uszkodzone lub ręcznie zmodyfikowane linie w pliku tekstowym
                 continue;
             }
         }

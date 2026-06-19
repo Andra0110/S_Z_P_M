@@ -1,3 +1,8 @@
+/**
+ * @file FileService.cpp
+ * @brief Implementation of the FileService class for handling file I/O operations.
+ */
+
 #include "FileService.h"
 
 #include <fstream>
@@ -7,7 +12,7 @@
 #include <iostream>
 
 /**
- * @brief Saves patients to a text file.
+ * @brief Saves patients to a CSV text file.
  *
  * @param patients Vector of patients.
  * @param filename Output file name.
@@ -40,7 +45,7 @@ void FileService::savePatients(
 }
 
 /**
- * @brief Loads patients from a text file.
+ * @brief Loads patients from a CSV text file.
  *
  * @param filename Input file name.
  * @return std::vector<Patient> Loaded patients.
@@ -55,13 +60,13 @@ std::vector<Patient> FileService::loadPatients(
     if (!file.is_open())
     {
         std::cerr << "Error: Could not open file " << filename << " for reading.\n";
-        return patients; // Zwraca pusty wektor, jeśli plik nie istnieje
+        return patients;
     }
 
     std::string line;
     while (std::getline(file, line))
     {
-        if (line.empty()) continue; // Pomija puste linie
+        if (line.empty()) continue;
 
         std::stringstream ss(line);
 
@@ -97,7 +102,7 @@ std::vector<Patient> FileService::loadPatients(
 }
 
 /**
- * @brief Saves doctors to a text file.
+ * @brief Saves doctors to a CSV text file.
  *
  * @param doctors Vector of doctors.
  * @param filename Output file name.
@@ -130,7 +135,7 @@ void FileService::saveDoctors(
 }
 
 /**
- * @brief Loads doctors from a text file.
+ * @brief Loads doctors from a CSV text file.
  *
  * @param filename Input file name.
  * @return std::vector<Doctor> Loaded doctors.
@@ -187,7 +192,7 @@ std::vector<Doctor> FileService::loadDoctors(
 }
 
 /**
- * @brief Saves visits to a text file.
+ * @brief Saves visits to a CSV text file.
  *
  * @param visits Vector of visits.
  * @param filename Output file name.
@@ -220,7 +225,7 @@ void FileService::saveVisits(
 }
 
 /**
- * @brief Loads visits from a text file.
+ * @brief Loads visits from a CSV text file.
  *
  * @param filename Input file name.
  * @return std::vector<Visit> Loaded visits.

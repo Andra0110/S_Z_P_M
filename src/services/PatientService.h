@@ -1,3 +1,8 @@
+/**
+ * @file PatientService.h
+ * @brief Header file for the PatientService class.
+ */
+
 #ifndef PATIENTSERVICE_H
 #define PATIENTSERVICE_H
 
@@ -19,53 +24,50 @@ class PatientService
         const std::string filename = "patients.csv";
 
     public:
-
-    
         /**
          * @brief Adds a new patient to the system.
-        * 
-         * @param patient Patient object to add.
+         * * @param patient Patient object to add.
          */
         void addPatient(const Patient& patient);
 
-            /**
-        * @brief Displays all patients stored in the system.
-        * 
-         * This method prints patient information
-        * to the console.
-        */ 
+        /**
+         * @brief Displays all patients stored in the system.
+         * * This method prints formatted patient information directly to the console.
+         */ 
         void displayPatients() const;
 
         /**
-         * @brief Searches patient by ID.
-         * 
-         * @param id Patient identifier.
-         * @return Patient* Pointer to patient object.
-         * @return nullptr If patient does not exist.
+         * @brief Searches for a patient by their ID.
+         * * @param id Patient identifier.
+         * @return Pointer to the found patient, or `nullptr` if the patient does not exist.
          */
         Patient* searchPatientById(int id);
 
-
         /**
-         * @brief Removes patient by ID.
+         * @brief Removes a patient by their ID.
          *
          * @param id Patient identifier.
-         * @return true If patient was removed.
-         * @return false If patient was not found.
+         * @retval true If the patient was successfully removed.
+         * @retval false If the patient was not found.
          */
         bool removePatient(int id);
 
         /**
-        * @brief Gets all patients.
-        *
-        * @return const std::vector<Patient>& List of patients.
-        */
-       const std::vector<Patient>& getPatients() const;
+         * @brief Gets all patients.
+         *
+         * @return const std::vector<Patient>& List of patients.
+         */
+        const std::vector<Patient>& getPatients() const;
 
-       void loadFromFile();
-       void saveToFile() const;
+        /**
+         * @brief Loads patients from a CSV file.
+         */
+        void loadFromFile();
 
-    };
-
+        /**
+         * @brief Saves all patients to a CSV file.
+         */
+        void saveToFile() const;
+};
 
 #endif

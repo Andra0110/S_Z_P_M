@@ -1,3 +1,8 @@
+/**
+ * @file TestRunner.h
+ * @brief Header file for the main test runner managing all subsystem tests.
+ */
+
 #ifndef TEST_RUNNER_H
 #define TEST_RUNNER_H
 

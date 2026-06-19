@@ -1,3 +1,8 @@
+/**
+ * @file Doctor.h
+ * @brief Header file for the Doctor class.
+ */
+
 #pragma once 
 
 #include <string>

@@ -1,3 +1,8 @@
+/**
+ * @file DoctorTests.cpp
+ * @brief Automated unit and integration tests for the Doctor module.
+ */
+
 #include <iostream>
 #include <vector>
 
@@ -35,7 +40,6 @@ void testDoctors(
 
     doctorService.addDoctor(doctor1);
 
-    // Zmieniono ścieżkę z "data/doctors.txt" na "doctors.txt"
     FileService::saveDoctors(
         doctorService.getDoctors(),
         "doctors.txt"
@@ -57,7 +61,6 @@ void testDoctors(
     std::cout << "\n[TEST] Displaying doctors from live service:\n";
     doctorService.displayDoctors();
 
-    // Test wyszukiwania lekarza
     Doctor* foundDoctor = doctorService.searchDoctorById(1);
 
     if (foundDoctor != nullptr)
@@ -68,13 +71,11 @@ void testDoctors(
                   << foundDoctor->getLastName()
                   << "\n";
                   
-        // TEST EDYCJI (Weryfikacja dodanych setterów)
         std::cout << "[TEST] Modifying doctor specialization...\n";
         foundDoctor->setSpecialization("Neurology");
         std::cout << "Updated specialization: " << foundDoctor->getSpecialization() << "\n";
     }
 
-    // Testy klasy walidatora
     std::cout << "\n[TEST] Doctor validator tests:\n";
     std::cout << "Is 'Cardiology' valid? " << Validator::isValidSpecialization("Cardiology") << "\n";      
     std::cout << "Is empty string valid? " << Validator::isValidSpecialization("") << "\n";

@@ -1,3 +1,8 @@
+/**
+ * @file DoctorTests.h
+ * @brief Header file for the Doctor module test functions.
+ */
+
 #ifndef DOCTOR_TESTS_H
 #define DOCTOR_TESTS_H
 

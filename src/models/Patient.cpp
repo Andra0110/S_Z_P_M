@@ -1,8 +1,14 @@
+/**
+ * @file Patient.cpp
+ * @brief Implementation of the Patient class.
+ */
+
 #include "Patient.h"
 
 /**
  * @brief Constructs a new Patient object.
- * * @param id Unique patient identifier.
+ *
+ * @param id Unique patient identifier.
  * @param firstName Patient first name.
  * @param lastName Patient last name.
  * @param pesel Patient PESEL number.
@@ -11,18 +17,17 @@ Patient::Patient(int id,
             const std::string& firstName,
             const std::string& lastName,
             const std::string& pesel)
-
         : id(id),
-            firstName(firstName),
-            lastName(lastName),
-            pesel(pesel)
-
+          firstName(firstName),
+          lastName(lastName),
+          pesel(pesel)
 {
 }
 
 /**
  * @brief Returns patient ID.
- * * @return int Patient ID.
+ *
+ * @return int Patient ID.
  */
 int Patient::getId() const
 {
@@ -31,7 +36,8 @@ int Patient::getId() const
 
 /**
  * @brief Returns patient first name.
- * * @return std::string Patient first name.
+ *
+ * @return std::string Patient first name.
  */
 std::string Patient::getFirstName() const
 {
@@ -40,7 +46,8 @@ std::string Patient::getFirstName() const
 
 /**
  * @brief Returns patient last name.
- * * @return std::string Patient last name.
+ *
+ * @return std::string Patient last name.
  */
 std::string Patient::getLastName() const
 {
@@ -49,7 +56,8 @@ std::string Patient::getLastName() const
 
 /**
  * @brief Returns patient PESEL number.
- * * @return std::string Patient PESEL.
+ *
+ * @return std::string Patient PESEL.
  */
 std::string Patient::getPesel() const
 {
@@ -58,7 +66,8 @@ std::string Patient::getPesel() const
 
 /**
  * @brief Sets a new first name for the patient.
- * * @param firstName The new first name.
+ *
+ * @param firstName The new first name.
  */
 void Patient::setFirstName(const std::string& firstName)
 {
@@ -67,7 +76,8 @@ void Patient::setFirstName(const std::string& firstName)
 
 /**
  * @brief Sets a new last name for the patient.
- * * @param lastName The new last name.
+ *
+ * @param lastName The new last name.
  */
 void Patient::setLastName(const std::string& lastName)
 {
@@ -76,7 +86,8 @@ void Patient::setLastName(const std::string& lastName)
 
 /**
  * @brief Sets a new PESEL number for the patient.
- * * @param pesel The new PESEL number.
+ *
+ * @param pesel The new PESEL number.
  */
 void Patient::setPesel(const std::string& pesel)
 {

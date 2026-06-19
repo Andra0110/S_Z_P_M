@@ -1,3 +1,8 @@
+/**
+ * @file VisitTests.cpp
+ * @brief Integration tests for the Visit module, verifying relations and availability.
+ */
+
 #include <iostream>
 #include <vector>
 
@@ -23,11 +28,9 @@ void testVisits(
 {
     std::cout << "\n=== VISIT TESTS ===\n";
 
-    // Rejestracja testowego pacjenta i lekarza (wymagane do poprawnej walidacji wizyt)
     Patient mockPatient(1, "Anna", "Kowalska", "12345678901");
     Doctor mockDoctor(1, "Jan", "Nowak", "Cardiology");
     
-    // Dodajemy do serwisów (jeśli jeszcze nie istnieją z poprzednich testów)
     if (patientService.searchPatientById(1) == nullptr) {
         patientService.addPatient(mockPatient);
     }
@@ -35,7 +38,6 @@ void testVisits(
         doctorService.addDoctor(mockDoctor);
     }
 
-    // Tworzenie obiektów wizyt
     Visit visit1(
         1,
         1,
@@ -101,7 +103,6 @@ void testVisits(
     visitService.addVisit(visit1);
     visitService.addVisit(visit2);
 
-    // Zmieniono ścieżkę z "data/visits.txt" na "visits.txt"
     FileService::saveVisits(
         visitService.getVisits(),
         "visits.txt"

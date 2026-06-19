@@ -20,7 +20,7 @@ int main() {
         std::cout << "ALARM! Bug! Validator accepted an empty name!\n";
     }
 
-    std::cout << "\n=== PATRYCJA'S TIMETABLE CONFLICT TEST ===\n";
+    std::cout << "\n=== TIMETABLE CONFLICT TEST ===\n";
     VisitService visitService;
     bool available = visitService.isDoctorAvailable(1, "2026-06-15 14:00");
     if (available == false) {
@@ -29,13 +29,13 @@ int main() {
         std::cout << "ALARM! Bug or empty database! System says doctor is available.\n";
     }
 
-    std::cout << "\n=== PATRYCJA'S FILE ERROR HANDLING TEST ===\n";
+    std::cout << "\n=== FILE ERROR HANDLING TEST ===\n";
     std::cout << "Attempting to load data from a non-existent file...\n";
     
-    // Wywołujemy funkcję z nieistniejącą nazwą pliku
+    
     std::vector<Visit> fakeVisits = FileService::loadVisits("nie_ma_mnie_tu_123.txt");
     
-    // Jeśli program przeszedł do tej linijki i się nie zawiesił - sukces!
+    
     std::cout << "Success! System survived the missing file test.\n";
     std::cout << "Loaded visits count from empty file: " << fakeVisits.size() << "\n";
 

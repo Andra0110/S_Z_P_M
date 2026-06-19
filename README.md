@@ -29,13 +29,13 @@ W zależności od używanego systemu operacyjnego, wykonaj poniższe polecenie w
 
 ### Windows (PowerShell)
 ```powershell
-g++ -std=c++17 src/main.cpp src/models/*.cpp src/services/*.cpp src/ui/*.cpp src/tests/*.cpp src/utils/*.cpp -o program.exe; .\program.exe
+g++ -std=c++17 src/main.cpp src/models/*.cpp src/services/*.cpp src/ui/*.cpp src/tests/*.cpp src/utils/*.cpp -o main.exe; .\main.exe
 ```
 
 ### MacOS (Terminal)
 ```terminal
-clang++ -std=c++17 -g src/main.cpp src/models/*.cpp src/services/*.cpp src/tests/*.cpp src/utils/*.cpp src/ui/*.cpp -o src/main_mac
-./src/main_mac
+clang++ -std=c++17 -g src/main.cpp src/models/*.cpp src/services/*.cpp src/tests/*.cpp src/utils/*.cpp src/ui/*.cpp -o main_mac
+./main_mac
 ```
 
 
